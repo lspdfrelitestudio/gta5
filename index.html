@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LSPDFR ELITE STUDIO</title>
+<title>LSPDFR ELITE STUDIO — Преміум контент для LSPDFR</title>
+<meta name="description" content="Найкращі паки, ліверії та моделі для LSPDFR. Професійна якість, швидка підтримка, регулярні оновлення.">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="sync-engine.js"></script>
+<script src="features.js"></script>
 <style>
 /* ===================== THEME VARIABLES ===================== */
 :root {
@@ -344,7 +347,7 @@ body.logged .show-logged{display:inline-flex;} body.logged .hide-logged{display:
 .status-err .status-dot { background:var(--danger); }
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
-/* ===================== SUPPORT BUTTON ===================== */
+/* ===================== SUPPORT BUTTON "Зв'яжіться з нами" — біла іконка повідомлення, слідує за скролом ===================== */
 #floatContact {
   position:fixed; top:85px; right:1.5rem; z-index:899;
   display:flex; flex-direction:column; align-items:flex-end; gap:0.6rem;
@@ -394,7 +397,7 @@ body.logged .show-logged{display:inline-flex;} body.logged .hide-logged{display:
 .float-tg { background:linear-gradient(135deg,#0088cc,#29b6f6); color:#fff; }
 .float-dc { background:linear-gradient(135deg,#5865F2,#7289da); color:#fff; }
 
-/* Push-повідомлення про графік підтримки */
+/* Push-повідомлення про графік підтримки (поза 10–22) */
 #supportScheduleNotif {
   position:fixed; top:50%; left:50%; z-index:9999;
   transform:translate(-50%,-50%) scale(0.85);
@@ -598,6 +601,7 @@ section { position:relative; z-index:1; }
 }
 .product-card:hover::before { opacity:1; }
 
+/* Product card enhanced hover & stagger */
 .product-card { transform-origin: center bottom; }
 .product-card:hover { transform: translateY(-8px) scale(1.02); }
 @keyframes prodCardIn {
@@ -1099,7 +1103,7 @@ section { position:relative; z-index:1; }
   padding:0.3rem 0.6rem;border-radius:4px;
   background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
   color:#fff;cursor:pointer;transition:all 0.2s;
-  .letter-spacing:1px;text-transform:uppercase;
+  letter-spacing:1px;text-transform:uppercase;
 }
 .mono-copy:hover{background:rgba(255,255,255,0.2);}
 
@@ -1222,9 +1226,18 @@ footer {
     <button class="theme-sw" onclick="toggleTheme()" title="Змінити тему">
       <div class="theme-sw-knob" id="themeKnob">🌙</div>
     </button>
+    <button class="cart-btn" onclick="openM('wishlistModal')" title="Список бажань" style="position:relative">
+      💖 <span class="cart-badge" id="wishlistBadge" style="display:none">0</span>
+    </button>
+    <button class="cart-btn" onclick="openM('compareModal')" title="Порівняння" style="position:relative">
+      📊 <span class="cart-badge" id="compareBadge" style="display:none">0</span>
+    </button>
     <button class="cart-btn" id="cartBtn" onclick="openM('cartModal')">
       🛒 <span id="cartText">Кошик</span>
       <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+    <button class="cart-btn" onclick="LIVE_CHAT.toggle()" title="Чат підтримки" style="position:relative">
+      💬 <span class="cart-badge" id="chatBadge" style="display:none;background:var(--success)">0</span>
     </button>
     <button class="btn btn-glass hide-logged" onclick="openM('authModal')" data-i18n="btn_login">Увійти</button>
     <button class="btn btn-primary show-logged" onclick="openM('cabinetModal')">👤 <span data-i18n="btn_cabinet">Кабінет</span></button>
@@ -1246,8 +1259,8 @@ footer {
     <p class="hero-tagline" data-i18n="hero_tagline">Преміальні моделі поліції України для GTA 5. Реалізм, деталізація, якість.</p>
     <p class="hero-sub-tag" data-i18n="hero_subtag">Офіційний магазин • Швидка доставка • Підтримка 24/7</p>
     <div class="hero-cta">
-      <a href="#catalog" class="btn btn-primary">Переглянути каталог</a>
-      <a href="#models" class="btn btn-gold">Моделі & EUP</a>
+      <a href="#catalog" class="btn btn-primary">🚔 <span data-i18n="btn_catalog">Переглянути каталог</span></a>
+      <a href="#models" class="btn btn-gold">🎨 <span data-i18n="btn_models">Моделі & EUP</span></a>
       <a href="#about" class="btn btn-glass" data-i18n="btn_about">Про нас</a>
     </div>
     <div class="hero-stats">
@@ -1291,7 +1304,7 @@ footer {
     <div class="models-grid reveal" id="modelsGrid"></div>
 
     <div class="commission-form-wrap" id="commissionForm">
-      <h3 class="font-orb" style="font-size:1rem;margin-bottom:1.5rem;color:var(--text);" data-i18n="form_commission_title">📋 Заявка на кастомне замовлен  я</h3>
+      <h3 class="font-orb" style="font-size:1rem;margin-bottom:1.5rem;color:var(--text);" data-i18n="form_commission_title">📋 Заявка на кастомне замовлення</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
         <div class="f-group">
           <label class="f-label" data-i18n="form_name">Ваше ім'я / нік</label>
@@ -1322,7 +1335,7 @@ footer {
       </div>
       <div style="display:flex;gap:0.8rem;margin-top:1rem;justify-content:flex-end;">
         <button class="btn btn-glass" onclick="closeCommForm()">Скасувати</button>
-        <button class="btn btn-gold" onclick="submitCommission()">Надіслати заявку</button>
+        <button class="btn btn-gold" onclick="submitCommission()">📨 <span data-i18n="btn_send">Надіслати заявку</span></button>
       </div>
     </div>
   </div>
@@ -1426,7 +1439,7 @@ footer {
           <label class="f-label" data-i18n="form_msg">Повідомлення</label>
           <textarea class="f-textarea" placeholder="Ваше запитання..." id="ctMsg"></textarea>
         </div>
-        <button class="btn btn-primary" onclick="sendContact(this)">Надіслати</button>
+        <button class="btn btn-primary" onclick="sendContact(this)">📨 <span data-i18n="btn_send_msg">Надіслати</span></button>
       </div>
     </div>
   </div>
@@ -1446,7 +1459,7 @@ footer {
   <p style="color:var(--text3);font-size:0.75rem;margin-top:1rem;">© 2024 LSPDFR ELITE STUDIO — всі права захищені</p>
 </footer>
 
-<!-- ===================== SUPPORT BUTTON ===================== -->
+<!-- ===================== SUPPORT BUTTON "Зв'яжіться з нами" — біла іконка повідомлення ===================== -->
 <div id="floatContact" title="Зв'яжіться з нами">
   <div class="float-links" id="floatLinks">
     <a href="https://t.me/lspdfrelitestudio" target="_blank" class="float-link float-tg">
@@ -1461,7 +1474,7 @@ footer {
   </button>
 </div>
 
-<!-- Push-повідомлення про графік підтримки -->
+<!-- Push-повідомлення про графік підтримки (поза 10:00–22:00) -->
 <div id="supportScheduleNotif">
   <div class="sched-title">⏰ Графік роботи підтримки</div>
   <div class="sched-box">
@@ -1482,13 +1495,26 @@ footer {
   <button class="notif-close" onclick="hideNotif()">✕</button>
 </div>
 
+<!-- ===================== LIVE CHAT BOX ===================== -->
+<div id="liveChatBox" style="display:none;position:fixed;bottom:20px;right:20px;width:350px;height:500px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);z-index:9999;flex-direction:column;backdrop-filter:blur(20px)">
+  <div style="padding:1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px 12px 0 0">
+    <div style="font-weight:700;font-size:1rem;color:#fff">💬 Чат підтримки</div>
+    <button onclick="LIVE_CHAT.toggle()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+  <div id="chatMessages" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column"></div>
+  <div style="padding:0.8rem;border-top:1px solid var(--border);display:flex;gap:0.5rem">
+    <input type="text" id="chatInput" placeholder="Напишіть повідомлення..." onkeydown="if(event.key==='Enter')LIVE_CHAT.send()" style="flex:1;padding:0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);outline:none;font-family:'Exo 2',sans-serif">
+    <button onclick="LIVE_CHAT.send()" style="padding:0.6rem 1rem;background:var(--accent);border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:700">↑</button>
+  </div>
+</div>
+
 <!-- ===================== MODALS ===================== -->
 
 <!-- AUTH MODAL -->
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <button class="m-close" onclick="closeM('authModal')">✕</button>
-    <div class="m-title">Авторизація</div>
+    <div class="m-title">🔐 <span data-i18n="auth_title">Авторизація</span></div>
     <div class="a-tabs">
       <button class="a-tab active" id="tab-login" onclick="authTab('login')" data-i18n="tab_login">Увійти</button>
       <button class="a-tab" id="tab-reg" onclick="authTab('register')" data-i18n="tab_reg">Реєстрація</button>
@@ -1579,37 +1605,37 @@ footer {
 <div class="modal-overlay" id="cabinetModal">
   <div class="modal wide">
     <button class="m-close" onclick="closeM('cabinetModal')">✕</button>
-    <div class="m-title">Особистий кабінет</div>
+    <div class="m-title">👤 <span data-i18n="cab_title">Особистий кабінет</span></div>
     <div class="cab-profile-bar">
       <div class="cab-avatar">👮</div>
       <div>
         <div class="cab-username" id="cabName">—</div>
         <div class="cab-email" id="cabEmail">—</div>
       </div>
-      <div class="cab-badge">● Активний</div>
+      <div class="cab-badge">● <span data-i18n="cab_active">Активний</span></div>
       <button class="btn btn-danger-o" onclick="doLogout()" style="font-size:0.75rem;padding:0.35rem 0.7rem;" data-i18n="btn_logout">Вийти</button>
     </div>
     <div class="cab-nav">
-      <button class="cab-tab active" onclick="cabTab('orders')">Замовлення</button>
-      <button class="cab-tab" onclick="cabTab('downloads')">Завантаження</button>
-      <button class="cab-tab" onclick="cabTab('settings')">Налаштування</button>
+      <button class="cab-tab active" onclick="cabTab('orders')" data-i18n="cab_orders">📦 Замовлення</button>
+      <button class="cab-tab" onclick="cabTab('downloads')" data-i18n="cab_downloads">⬇ Завантаження</button>
+      <button class="cab-tab" onclick="cabTab('settings')" data-i18n="cab_settings">⚙ Налаштування</button>
     </div>
 
     <!-- Orders -->
     <div class="cab-section active" id="cab-orders">
-      <div id="orderList"><p class="text-c text-muted" style="padding:2rem;">Замовлень поки немає</p></div>
+      <div id="orderList"><p class="text-c text-muted" style="padding:2rem;" data-i18n="no_orders">Замовлень поки немає</p></div>
     </div>
 
     <!-- Downloads -->
     <div class="cab-section" id="cab-downloads">
-      <div id="downloadList"><p class="text-c text-muted" style="padding:2rem;">Немає доступних файлів</p></div>
+      <div id="downloadList"><p class="text-c text-muted" style="padding:2rem;" data-i18n="no_downloads">Немає доступних файлів</p></div>
     </div>
 
     <!-- Settings -->
     <div class="cab-section" id="cab-settings">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
         <div class="f-group">
-          <label class="f-label">Нікнейм</label>
+          <label class="f-label" data-i18n="form_username">Нікнейм</label>
           <input class="f-input" type="text" id="sName">
         </div>
         <div class="f-group">
@@ -1621,11 +1647,11 @@ footer {
           <input class="f-input" type="text" id="sTg" placeholder="@username">
         </div>
         <div class="f-group">
-          <label class="f-label">Новий пароль (якщо потрібно)</label>
+          <label class="f-label" data-i18n="form_new_pass">Новий пароль (якщо потрібно)</label>
           <input class="f-input" type="password" id="sNewPwd" placeholder="Залиште порожнім">
         </div>
       </div>
-      <button class="btn btn-primary" onclick="saveSettings()">Зберегти</button>
+      <button class="btn btn-primary" onclick="saveSettings()" data-i18n="btn_save">💾 Зберегти</button>
     </div>
   </div>
 </div>
@@ -1634,26 +1660,56 @@ footer {
 <div class="modal-overlay" id="cartModal">
   <div class="modal wide">
     <button class="m-close" onclick="closeM('cartModal')">✕</button>
-    <div class="m-title">Кошик</div>
+    <div class="m-title">🛒 <span data-i18n="cart_title">Кошик</span></div>
     <div id="cartBody"></div>
-    <div id="cartEmpty" class="text-c text-muted" style="padding:2rem;">Кошик порожній</div>
+    <div id="cartEmpty" class="text-c text-muted" style="padding:2rem;" data-i18n="cart_empty">Кошик порожній 😔</div>
     <div id="cartFoot" class="hidden">
       <div class="promo-row">
         <input type="text" id="promoInput" placeholder="Промокод" maxlength="20">
-        <button onclick="applyPromo()">Застосувати</button>
+        <button onclick="applyPromo()" data-i18n="btn_apply_promo">Застосувати</button>
       </div>
       <div id="promoOk" class="promo-ok hidden"></div>
       <div id="promoErr" class="promo-err hidden"></div>
       <div id="cartDiscountRow" class="cart-discount-row hidden"></div>
       <div class="cart-total-row">
-        <span>Загальна сума:</span>
+        <span data-i18n="cart_total">Загальна сума:</span>
         <span class="cart-total-price" id="cartTotal">0 грн</span>
       </div>
       <div class="flex-bc mt-2">
-        <button class="btn btn-danger-o" onclick="clearCart()">Очистити</button>
-        <button class="btn btn-gold" onclick="goCheckout()">Оформити замовлення</button>
+        <button class="btn btn-danger-o" onclick="clearCart()" data-i18n="btn_clear">🗑 Очистити</button>
+        <button class="btn btn-gold" onclick="goCheckout()" data-i18n="btn_checkout">💳 Оформити замовлення</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- WISHLIST MODAL -->
+<div class="modal-overlay" id="wishlistModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('wishlistModal')">✕</button>
+    <div class="m-title">💖 Список бажань</div>
+    <div id="wishlistBody"></div>
+    <div id="wishlistEmpty" class="text-c text-muted" style="padding:2rem;">Список бажань порожній 💔</div>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
+<div class="modal-overlay" id="compareModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('compareModal')">✕</button>
+    <div class="m-title">📊 Порівняння товарів</div>
+    <div id="compareBody"></div>
+    <div id="compareEmpty" class="text-c text-muted" style="padding:2rem;">Додайте товари для порівняння</div>
+    <button class="btn btn-danger-o" onclick="COMPARE.clear();renderCompare()" style="margin-top:1rem">Очистити все</button>
+  </div>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+<div class="modal-overlay" id="quickViewModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('quickViewModal')">✕</button>
+    <div class="m-title">👁️ Швидкий перегляд</div>
+    <div id="qvContent"></div>
   </div>
 </div>
 
@@ -1661,18 +1717,18 @@ footer {
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal wide">
     <button class="m-close" onclick="closeM('checkoutModal')">✕</button>
-    <div class="m-title">Оформлення замовлення</div>
+    <div class="m-title" data-i18n="checkout_title">💳 Оформлення замовлення</div>
     <div class="checkout-steps">
-      <div class="co-step active" id="cstep1">1. Дані</div>
-      <div class="co-step" id="cstep2">2. Оплата</div>
-      <div class="co-step" id="cstep3">3. Підтвердження</div>
+      <div class="co-step active" id="cstep1">1. <span data-i18n="co_step1">Дані</span></div>
+      <div class="co-step" id="cstep2">2. <span data-i18n="co_step2">Оплата</span></div>
+      <div class="co-step" id="cstep3">3. <span data-i18n="co_step3">Підтвердження</span></div>
     </div>
 
     <!-- Step 1 -->
     <div id="co1">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
         <div class="f-group">
-          <label class="f-label">Ім'я</label>
+          <label class="f-label" data-i18n="form_name">Ім'я</label>
           <input class="f-input" id="coName" type="text" placeholder="Ваше ім'я">
         </div>
         <div class="f-group">
@@ -1686,74 +1742,74 @@ footer {
       </div>
       <div class="flex-bc">
         <span class="text-muted" style="font-size:0.82rem;"></span>
-        <button class="btn btn-primary" onclick="coStep(2)">Далі →</button>
+        <button class="btn btn-primary" onclick="coStep(2)" data-i18n="btn_next">Далі →</button>
       </div>
     </div>
 
     <!-- Step 2 -->
     <div id="co2" class="hidden">
-      <p class="text-muted mb-2" style="font-size:0.88rem;">Оберіть метод оплати:</p>
+      <p class="text-muted mb-2" style="font-size:0.88rem;" data-i18n="pay_choose">Оберіть метод оплати:</p>
       <div class="pay-methods">
         <button class="pay-card sel" id="pm1" onclick="selPay('pm1')">
           <span class="pay-icon">🏦</span>
-          <div><div class="pay-label">Monobank</div><div class="pay-sub">Переказ на картку UAH</div></div>
+          <div><div class="pay-label">Monobank</div><div class="pay-sub" data-i18n="pay_mono_sub">Переказ на картку UAH</div></div>
         </button>
         <button class="pay-card" id="pm2" onclick="selPay('pm2')">
           <span class="pay-icon">🔸</span>
-          <div><div class="pay-label">USDT TRC-20</div><div class="pay-sub">Криптовалюта, без комісій</div></div>
+          <div><div class="pay-label">USDT TRC-20</div><div class="pay-sub" data-i18n="pay_usdt_sub">Криптовалюта, без комісій</div></div>
         </button>
         <button class="pay-card" id="pm3" onclick="selPay('pm3')">
           <span class="pay-icon">✈</span>
-          <div><div class="pay-label">Telegram</div><div class="pay-sub">Узгодимо особисто</div></div>
+          <div><div class="pay-label">Telegram</div><div class="pay-sub" data-i18n="pay_tg_sub">Узгодимо особисто</div></div>
         </button>
       </div>
       <div id="monoInfo" style="display:block;">
-        <p class="text-muted mb-1" style="font-size:0.82rem;">Переведіть кошти на картку Monobank:</p>
+        <p class="text-muted mb-1" style="font-size:0.82rem;" data-i18n="pay_mono_desc">Переведіть кошти на картку Monobank:</p>
         <div class="mono-card">
           <div class="mono-logo">●●● MONOBANK</div>
           <div class="mono-num" id="monoNum">5375 4141 4141 4141</div>
           <div class="mono-owner">LSPDFR ELITE STUDIO</div>
-          <button class="mono-copy" onclick="copyCard()">Копіювати</button>
+          <button class="mono-copy" onclick="copyCard()" data-i18n="btn_copy">Копіювати</button>
         </div>
-        <p style="font-size:0.78rem;color:var(--text3);line-height:1.6;">
-          ⚠ Після оплати надішліть скрін у Telegram. Адмін підтвердить оплату і видасть товар.
+        <p style="font-size:0.78rem;color:var(--text3);line-height:1.6;" data-i18n="pay_mono_note">
+          ⚠ Після оплати надішліть скрін у Telegram або через форму нижче. Адмін підтвердить оплату і видасть товар.
         </p>
         <div class="f-group mt-2">
-          <label class="f-label">Коментар / Скрін оплати</label>
+          <label class="f-label" data-i18n="pay_comment">Коментар / Скрін оплати</label>
           <input class="f-input" type="text" id="payComment" placeholder="Надіслав о 14:30, остання 4141">
         </div>
       </div>
       <div class="confirm-sum">
-        <span style="font-weight:700;">Загальна сума:</span>
+        <span class="font-raj" style="font-weight:700;" data-i18n="cart_total">Загальна сума:</span>
         <span class="confirm-amount" id="coFinalTotal">0 грн</span>
       </div>
       <div class="flex-bc mt-2">
-        <button class="btn btn-glass" onclick="coStep(1)">← Назад</button>
-        <button class="btn btn-gold" onclick="confirmOrder()">Підтвердити замовлення</button>
+        <button class="btn btn-glass" onclick="coStep(1)">← <span data-i18n="btn_back">Назад</span></button>
+        <button class="btn btn-gold" onclick="confirmOrder()" data-i18n="btn_confirm">✅ Підтвердити замовлення</button>
       </div>
     </div>
 
     <!-- Step 3 success -->
     <div id="co3" class="hidden">
       <div class="success-wrap">
-        <div class="success-icon">✓</div>
-        <h3 class="font-orb" style="font-size:1.1rem;margin:1rem 0 0.5rem;color:var(--text);">Замовлення прийнято!</h3>
-        <p style="color:var(--text2);font-size:0.88rem;line-height:1.7;">
+        <div class="success-icon">🎉</div>
+        <h3 class="font-orb" style="font-size:1.1rem;margin:1rem 0 0.5rem;color:var(--text);" data-i18n="order_success">Замовлення прийнято!</h3>
+        <p style="color:var(--text2);font-size:0.88rem;line-height:1.7;" data-i18n="order_success_desc">
           Дякуємо! Ваше замовлення зареєстровано.<br>
           Після підтвердження оплати адміністратор видасть файл у вашому кабінеті.<br>
           <strong style="color:var(--accent2);">Зазвичай це займає до 30 хвилин.</strong>
         </p>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:1rem;margin:1.2rem 0;font-size:0.85rem;">
           <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
-            <span class="text-muted">№ замовлення:</span>
+            <span class="text-muted" data-i18n="order_num">№ замовлення:</span>
             <span class="font-raj" style="color:var(--accent2);" id="orderNum">#0000</span>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span class="text-muted">Статус:</span>
-            <span class="order-status s-pend">Очікує підтвердження</span>
+            <span class="text-muted" data-i18n="order_status_label">Статус:</span>
+            <span class="order-status s-pend" data-i18n="status_await">Очікує підтвердження</span>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="closeM('checkoutModal');clearCart();">Повернутись до магазину</button>
+        <button class="btn btn-primary" onclick="closeM('checkoutModal');clearCart();" data-i18n="btn_back_shop">← Повернутись до магазину</button>
       </div>
     </div>
   </div>
@@ -1763,7 +1819,7 @@ footer {
 <div class="modal-overlay" id="adminModal">
   <div class="modal xwide">
     <button class="m-close" onclick="closeM('adminModal')">✕</button>
-    <div class="m-title">Адміністративна панель</div>
+    <div class="m-title">⚙ Адміністративна панель</div>
 
     <div id="adminLoginBlock">
       <p class="text-muted mb-2" style="font-size:0.88rem;">Введіть пароль адміна:</p>
@@ -1779,10 +1835,10 @@ footer {
     <div id="adminPanel" class="hidden">
       <div class="admin-wrap">
         <div class="admin-sidebar">
-          <button class="admin-nav-btn active" onclick="adminSec('orders')">Замовлення</button>
-          <button class="admin-nav-btn" onclick="adminSec('users')">Користувачі</button>
-          <button class="admin-nav-btn" onclick="adminSec('issue')">Видати товар</button>
-          <button class="admin-nav-btn" onclick="adminSec('stats')">Статистика</button>
+          <button class="admin-nav-btn active" onclick="adminSec('orders')">📦 Замовлення</button>
+          <button class="admin-nav-btn" onclick="adminSec('users')">👥 Користувачі</button>
+          <button class="admin-nav-btn" onclick="adminSec('issue')">🎁 Видати товар</button>
+          <button class="admin-nav-btn" onclick="adminSec('stats')">📊 Статистика</button>
         </div>
         <div class="admin-main">
 
@@ -1810,7 +1866,7 @@ footer {
 
           <!-- Issue product -->
           <div class="admin-section" id="asec-issue">
-            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text);">Видати товар покупцю</h3>
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text);">🎁 Видати товар покупцю</h3>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
               <div class="f-group">
                 <label class="f-label">Email користувача</label>
@@ -1829,12 +1885,12 @@ footer {
                 <input class="f-input" type="text" id="issueNote" placeholder="Встановлення: скопіювати в папку mods/...">
               </div>
             </div>
-            <button class="btn btn-success" onclick="issueProduct()">Видати товар та підтвердити оплату</button>
+            <button class="btn btn-success" onclick="issueProduct()">✅ Видати товар та підтвердити оплату</button>
           </div>
 
           <!-- Stats -->
           <div class="admin-section" id="asec-stats">
-            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;color:var(--text);">Статистика</h3>
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;color:var(--text);">📊 Статистика</h3>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
               <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:1.2rem;text-align:center;">
                 <div class="font-orb" style="font-size:1.8rem;color:var(--accent2);" id="statOrders">0</div>
@@ -1857,11 +1913,11 @@ footer {
   </div>
 </div>
 
-<!-- COMMISSION MODAL -->
+<!-- COMMISSION MODAL (для вибраної моделі) -->
 <div class="modal-overlay" id="commModal">
   <div class="modal">
     <button class="m-close" onclick="closeM('commModal')">✕</button>
-    <div class="m-title">Замовити кастомну версію</div>
+    <div class="m-title">🎨 Замовити кастомну версію</div>
     <p class="text-muted mb-2" style="font-size:0.88rem;">Заповніть форму і ми зв'яжемось з вами протягом 24 годин.</p>
     <div class="auth-body active" style="flex-direction:column;gap:0.9rem;">
       <div class="f-group">
@@ -1872,75 +1928,14 @@ footer {
         <label class="f-label">Деталі</label>
         <textarea class="f-textarea" id="qDetails" placeholder="Що саме потрібно зробити..."></textarea>
       </div>
-      <button class="btn btn-gold" onclick="submitQuick()">Надіслати запит</button>
+      <button class="btn btn-gold" onclick="submitQuick()">📨 Надіслати запит</button>
     </div>
   </div>
 </div>
 
 <script>
 // ===================================
-// STORAGE KEY
-// ===================================
-const STORAGE_KEY = 'lspdfr_store_v2';
-
-// ===================================
-// INITIALIZE DATA FROM STORAGE
-// ===================================
-function loadStore() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : getDefaultStore();
-  } catch (e) {
-    return getDefaultStore();
-  }
-}
-
-function getDefaultStore() {
-  return {
-    users: {},
-    orders: [],
-    cart: [],
-    theme: 'dark',
-    lang: 'uk',
-    lastUpdated: new Date().toISOString()
-  };
-}
-
-function saveStore(store) {
-  store.lastUpdated = new Date().toISOString();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-  // Notify other tabs
-  window.dispatchEvent(new Event('storeUpdated'));
-}
-
-let store = loadStore();
-
-// ===================================
-// SYNC WITH OTHER TABS
-// ===================================
-window.addEventListener('storage', (e) => {
-  if (e.key === STORAGE_KEY && e.newValue) {
-    store = JSON.parse(e.newValue);
-    updateUI();
-  }
-});
-
-window.addEventListener('storeUpdated', () => {
-  updateUI();
-});
-
-function updateUI() {
-  updateCart();
-  if (currentUser) renderCabOrders();
-  if (adminLogged) {
-    renderAdminOrders();
-    renderAdminUsers();
-    updateAdminStats();
-  }
-}
-
-// ===================================
-// i18n TRANSLATIONS (скорочено, основне)
+// i18n TRANSLATIONS
 // ===================================
 const i18n = {
   uk: {
@@ -1981,289 +1976,339 @@ const i18n = {
     terms:'Я погоджуюсь з умовами використання сервісу',
     btn_reg_do:'Зареєструватись', have_account:'Вже є акаунт?', do_login:'Увійти',
     cab_title:'Особистий кабінет', cab_active:'Активний',
-    btn_logout:'Вийти', cab_orders:'Замовлення', cab_downloads:'Завантаження',
-    cab_settings:'Налаштування', no_orders:'Замовлень поки немає', no_downloads:'Немає доступних файлів',
-    form_new_pass:'Новий пароль (якщо потрібно)', btn_save:'Зберегти',
-    cart_title:'Кошик', cart_empty:'Кошик порожній', cart_total:'Загальна сума:',
-    btn_clear:'Очистити', btn_checkout:'Оформити замовлення', btn_apply_promo:'Застосувати',
-    checkout_title:'Оформлення замовлення',
+    btn_logout:'Вийти', cab_orders:'📦 Замовлення', cab_downloads:'⬇ Завантаження',
+    cab_settings:'⚙ Налаштування', no_orders:'Замовлень поки немає', no_downloads:'Немає доступних файлів',
+    form_new_pass:'Новий пароль (якщо потрібно)', btn_save:'💾 Зберегти',
+    cart_title:'Кошик', cart_empty:'Кошик порожній 😔', cart_total:'Загальна сума:',
+    btn_clear:'🗑 Очистити', btn_checkout:'💳 Оформити замовлення', btn_apply_promo:'Застосувати',
+    checkout_title:'💳 Оформлення замовлення',
     co_step1:'Дані', co_step2:'Оплата', co_step3:'Підтвердження',
     pay_choose:'Оберіть метод оплати:',
     pay_mono_sub:'Переказ на картку UAH', pay_usdt_sub:'Криптовалюта, без комісій', pay_tg_sub:'Узгодимо особисто',
     pay_mono_desc:'Переведіть кошти на картку Monobank:',
     btn_copy:'Копіювати',
-    pay_mono_note:'⚠ Після оплати надішліть скрін у Telegram. Адмін підтвердить оплату і видасть товар.',
+    pay_mono_note:'⚠ Після оплати надішліть скрін у Telegram або через форму нижче. Адмін підтвердить оплату і видасть товар.',
     pay_comment:'Коментар / Скрін оплати',
-    btn_next:'Далі →', btn_back:'Назад', btn_confirm:'Підтвердити замовлення',
+    btn_next:'Далі →', btn_back:'Назад', btn_confirm:'✅ Підтвердити замовлення',
     order_success:'Замовлення прийнято!',
-    order_success_desc:'Дякуємо! Ваше замовлення зареєстровано. Після підтвердження оплати адміністратор видасть файл у вашому кабінеті. Зазвичай це займає до 30 хвилин.',
-
-letter-spacing:1px;text-transform:uppercase;
-}
-.mono-copy:hover{background:rgba(255,255,255,0.2);}
-
-.confirm-sum{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:7px;padding:1rem;margin:1rem 0;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.confirm-amount{font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold);}
-
-/* ===================== SUCCESS ===================== */
-.success-wrap{text-align:center;padding:2rem 0;}
-.success-icon{font-size:4rem;animation:popIn 0.5s cubic-bezier(.34,1.56,.64,1);}
-@keyframes popIn{0%{transform:scale(0);}100%{transform:scale(1);}}
-
-/* ===================== NOTIFICATION ===================== */
-.notif {
-  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(200%);
-  min-width:280px;max-width:380px;
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:10px;padding:1rem 1.3rem;
-  z-index:9999;
-  display:flex;align-items:center;gap:0.8rem;
-  font-family:'Rajdhani',sans-serif;font-weight:600;
-  box-shadow:var(--shadow);
-  transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);
-  backdrop-filter:blur(20px);
-}
-.notif.show{transform:translateX(-50%) translateY(0);}
-.notif-icon{font-size:1.3rem;flex-shrink:0;}
-.notif-text{flex:1;}
-.notif-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.9rem;}
-
-/* ===================== FOOTER ===================== */
-footer {
-  background:var(--bg2);
-  border-top:1px solid var(--border);
-  padding:3rem 2rem 1.5rem;
-  text-align:center;position:relative;z-index:1;
-}
-.footer-logo{
-  font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;
-  color:var(--accent3);text-shadow:0 0 20px rgba(0,229,255,0.4);
-}
-.footer-links{
-  display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
-  margin:1.5rem 0;
-}
-.footer-links a{
-  color:var(--text3);font-size:0.82rem;text-decoration:none;
-  transition:color 0.2s;
-}
-.footer-links a:hover{color:var(--accent2);}
-
-/* ===================== UTILITIES ===================== */
-.hidden{display:none!important;}
-.text-c{text-align:center;}
-.text-gold{color:var(--gold);}
-.text-muted{color:var(--text3);}
-.mt-1{margin-top:0.5rem;} .mt-2{margin-top:1rem;} .mt-3{margin-top:1.5rem;}
-.mb-1{margin-bottom:0.5rem;} .mb-2{margin-bottom:1rem;}
-.flex-bc{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
-.divider{height:1px;background:var(--border);margin:1rem 0;}
-
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
-
-.reveal{opacity:0;transform:translateY(30px);transition:all 0.7s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-
-@media(max-width:900px){
-  .nav-links{display:none;}
-  .about-grid,.contact-grid{grid-template-columns:1fr;}
-  .admin-wrap{grid-template-columns:1fr;}
-  .admin-sidebar{flex-direction:row;flex-wrap:wrap;}
-}
-@media(max-width:600px){
-  .hero-stats{flex-direction:column;gap:0;}
-  .hero-stat{border-right:none;border-bottom:1px solid var(--border);}
-  .hero-stat:last-child{border-bottom:none;}
-}
-</style>
-</head>
-<body>
-
-<!-- BG EFFECTS -->
-<div class="bg-grid"></div>
-<div class="bg-glow bg-glow-1"></div>
-<div class="bg-glow bg-glow-2"></div>
-<div class="bg-glow bg-glow-3"></div>
-<div class="police-sweep"></div>
-<div id="particles-wrap"></div>
-
-<!-- STATUS PILL -->
-<div id="statusPill"></div>
-
-<!-- NAVBAR & HERO & SECTIONS (як раніше, без змін) -->
-<!-- ... (весь HTML контент залишається тим же) ... -->
-
-<!-- NOTIFICATION -->
-<div class="notif" id="notif">
-  <span class="notif-icon" id="notifIcon">✅</span>
-  <span class="notif-text" id="notifText"></span>
-  <button class="notif-close" onclick="hideNotif()">✕</button>
-</div>
-
-<script>
-// ===================================
-// STORAGE SYNCHRONIZATION
-// ===================================
-const STORAGE_KEY = 'lspdfr_store_v3';
-
-function loadStore() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : getDefaultStore();
-  } catch (e) {
-    console.error('Storage load error:', e);
-    return getDefaultStore();
-  }
-}
-
-function getDefaultStore() {
-  return {
-    users: {},
-    orders: [],
-    cart: [],
-    theme: 'dark',
-    lang: 'uk',
-    promos: { 'ELITE10': 10, 'WELCOME5': 5, 'HOT15': 15, 'NEW20': 20 },
-    lastUpdated: new Date().toISOString()
-  };
-}
-
-function saveStore(store) {
-  store.lastUpdated = new Date().toISOString();
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-    window.dispatchEvent(new CustomEvent('storeUpdated', { detail: store }));
-  } catch (e) {
-    console.error('Storage save error:', e);
-  }
-}
-
-let store = loadStore();
-
-// Синхронізація між табами
-window.addEventListener('storage', (e) => {
-  if (e.key === STORAGE_KEY && e.newValue) {
-    store = JSON.parse(e.newValue);
-    syncUI();
-  }
-});
-
-function syncUI() {
-  // Оновлюємо UI з останніми даними зі store
-  if (currentUser && store.users[currentUser.email]) {
-    currentUser = store.users[currentUser.email];
-    renderCabOrders();
-  }
-  cart = store.cart || [];
-  updateCart();
-  if (adminLogged) {
-    renderAdminOrders();
-    renderAdminUsers();
-    updateAdminStats();
-  }
-}
-
-// ===================================
-// GLOBAL STATE
-// ===================================
-let cart = store.cart || [];
-let currentUser = null;
-let adminLogged = false;
-let lang = store.lang || 'uk';
-let theme = store.theme || 'dark';
-let activePromo = null;
-
-// ===================================
-// i18n (МІНІМІАЛЬНА ВЕРСІЯ)
-// ===================================
-const i18n = {
-  uk: {
-    status_ok: 'Система працює нормально',
-    status_err: 'Виникла помилка системи',
-    cart_empty: 'Кошик порожній',
-    notify_add: 'додано до кошика!',
-    promo_ok: '✓ Промокод застосовано',
-    promo_err: 'Невірний промокод',
-    order_success: 'Замовлення прийнято!',
-    login_success: 'Успішний вхід!',
-    logout_msg: 'До побачення!',
-    no_account_error: 'Увійдіть в акаунт для оформлення',
+    order_success_desc:'Дякуємо! Ваше замовлення зареєстровано.<br>Після підтвердження оплати адміністратор видасть файл у вашому кабінеті.<br><strong style="color:var(--accent2);">Зазвичай це займає до 30 хвилин.</strong>',
+    order_num:'№ замовлення:', order_status_label:'Статус:', status_await:'Очікує підтвердження',
+    btn_back_shop:'← Повернутись до магазину',
+    form_commission_title:'📋 Заявка на кастомне замовлення',
+    btn_send:'Надіслати заявку',
+    status_ok:'Система працює нормально', status_err:'Виникла помилка системи',
+    cartText:'Кошик',
   },
   en: {
-    status_ok: 'System running normally',
-    status_err: 'System error occurred',
-    cart_empty: 'Cart is empty',
-    notify_add: 'added to cart!',
-    promo_ok: '✓ Promo code applied',
-    promo_err: 'Invalid promo code',
-    order_success: 'Order received!',
-    login_success: 'Successful login!',
-    logout_msg: 'Goodbye!',
-    no_account_error: 'Login to checkout',
+    nav_catalog:'Catalog', nav_models:'Models / EUP', nav_about:'About', nav_contact:'Contact',
+    btn_login:'Login', btn_cabinet:'Cabinet',
+    hero_badge:'Ukraine Police Mods for GTA 5 • LSPDFR',
+    hero_tagline:'Premium Ukraine police models for GTA 5. Realism, detail, quality.',
+    hero_subtag:'Official Store • Fast Delivery • 24/7 Support',
+    btn_catalog:'Browse Catalog', btn_models:'Models & EUP', btn_about:'About Us',
+    stat_mods:'Mods', stat_clients:'Clients', stat_rating:'Rating',
+    sec_shop:'Shop', sec_catalog:'Mod Catalog',
+    cat_all:'All', cat_car:'Vehicles', cat_skin:'Skins', cat_pack:'Packs', cat_weapon:'Weapons',
+    sec_commission:'Commissions', sec_models:'Models & EUP Forms',
+    models_desc:'Order a custom 3D model or EUP uniform for your unit. Realistic detail, 3–10 day turnaround.',
+    form_name:'Your name / nick', form_contact:'Telegram / Discord', form_type:'Order type',
+    form_choose:'Choose...', opt_car:'3D Vehicle model', opt_eup:'EUP Uniform',
+    opt_texture:'Textures / Skin', opt_other:'Other',
+    form_budget:'Budget (UAH)', form_details:'Order details',
+    sec_about:'Who we are', about_studio:'LSPDFR ELITE STUDIO', about_tagline:'Official premium content store',
+    about_mods:'mods', about_rating:'rating', about_clients:'clients',
+    about_title:'About Us',
+    about_p1:'LSPDFR ELITE STUDIO — a team of professional 3D modelers specializing in realistic Ukraine police mods for GTA 5.',
+    about_p2:'Every model is based on real photos, official documentation, and consultations with law enforcement.',
+    feat1_t:'Maximum Detail', feat1_d:'Realistic geometry and 4K textures',
+    feat2_t:'Fast Delivery', feat2_d:'Files available right after confirmation',
+    feat3_t:'Free Updates', feat3_d:'Support for new GTA 5 and LSPDFR versions',
+    feat4_t:'Wide Compatibility', feat4_d:'LSPDFR, FiveM (ESX/QBCore), Singleplayer',
+    sec_faq:'FAQ', sec_contact:'Contact',
+    contact_title:'Contacts', contact_reach:'Reach us',
+    contact_desc:'Questions about mods, orders, or want something unique? We\'re always here!',
+    contact_form:'Write directly',
+    form_contact_label:'Email or Telegram', form_msg:'Message',
+    btn_send_msg:'Send', footer_desc:'Premium Ukraine police mods for GTA 5',
+    auth_title:'Authorization', tab_login:'Login', tab_reg:'Register',
+    form_email:'Email', form_pass:'Password', btn_login_do:'Login',
+    no_account:'No account?', do_reg:'Register',
+    form_username:'Username', form_pass_confirm:'Confirm password',
+    terms:'I agree to the terms of service',
+    btn_reg_do:'Register', have_account:'Already have an account?', do_login:'Login',
+    cab_title:'Personal Cabinet', cab_active:'Active',
+    btn_logout:'Logout', cab_orders:'📦 Orders', cab_downloads:'⬇ Downloads',
+    cab_settings:'⚙ Settings', no_orders:'No orders yet', no_downloads:'No files available',
+    form_new_pass:'New password (if needed)', btn_save:'💾 Save',
+    cart_title:'Cart', cart_empty:'Cart is empty 😔', cart_total:'Total:',
+    btn_clear:'🗑 Clear', btn_checkout:'💳 Checkout', btn_apply_promo:'Apply',
+    checkout_title:'💳 Checkout',
+    co_step1:'Details', co_step2:'Payment', co_step3:'Confirm',
+    pay_choose:'Choose payment method:',
+    pay_mono_sub:'Transfer to UAH card', pay_usdt_sub:'Crypto, no fees', pay_tg_sub:'We\'ll arrange personally',
+    pay_mono_desc:'Transfer funds to the Monobank card:',
+    btn_copy:'Copy',
+    pay_mono_note:'⚠ After payment, send a screenshot via Telegram or the form below. Admin will confirm and issue the product.',
+    pay_comment:'Comment / Payment screenshot',
+    btn_next:'Next →', btn_back:'Back', btn_confirm:'✅ Confirm Order',
+    order_success:'Order received!',
+    order_success_desc:'Thank you! Your order is registered.<br>After payment confirmation the admin will issue the file in your cabinet.<br><strong style="color:var(--accent2);">Usually within 30 minutes.</strong>',
+    order_num:'Order #:', order_status_label:'Status:', status_await:'Awaiting confirmation',
+    btn_back_shop:'← Back to shop',
+    form_commission_title:'📋 Custom Commission Request',
+    btn_send:'Send Request',
+    status_ok:'System running normally', status_err:'System error occurred',
+    cartText:'Cart',
   }
 };
+let lang = 'uk';
 
-// ===================================
-// UTILITY FUNCTIONS
-// ===================================
 function setLang(l) {
   lang = l;
-  store.lang = l;
-  saveStore(store);
-  document.querySelectorAll('.lang-btn').forEach(b => 
-    b.classList.toggle('active', b.textContent.toLowerCase().includes(l === 'uk' ? 'укр' : 'eng'))
-  );
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(l === 'uk' ? 'укр' : 'eng')));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (i18n[l][key]) el.innerHTML = i18n[l][key];
+  });
 }
 
+// ===================================
+// THEME
+// ===================================
+let theme = 'dark';
 function toggleTheme() {
   theme = theme === 'dark' ? 'light' : 'dark';
-  store.theme = theme;
-  saveStore(store);
   document.documentElement.setAttribute('data-theme', theme);
   document.getElementById('themeKnob').textContent = theme === 'dark' ? '🌙' : '☀';
 }
 
-function notify(icon, text) {
-  const el = document.getElementById('notif');
-  document.getElementById('notifIcon').textContent = icon;
-  document.getElementById('notifText').textContent = text;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
-}
+// ===================================
+// PARTICLES
+// ===================================
+(function spawnParticles() {
+  const wrap = document.getElementById('particles-wrap');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const x = Math.random() * 100;
+    const dur = 8 + Math.random() * 12;
+    const delay = -Math.random() * dur;
+    const drift = (Math.random() - 0.5) * 200 + 'px';
+    p.style.cssText = `left:${x}%;--drift:${drift};animation-duration:${dur}s;animation-delay:${delay}s;`;
+    if (Math.random() > 0.7) { p.style.background = 'var(--gold)'; p.style.width = '3px'; p.style.height = '3px'; }
+    wrap.appendChild(p);
+  }
+})();
 
-function hideNotif() {
-  document.getElementById('notif').classList.remove('show');
-}
-
-function openM(id) {
-  document.getElementById(id).classList.add('open');
-}
-
-function closeM(id) {
-  document.getElementById(id).classList.remove('open');
+// ===================================
+// STATUS PILL
+// ===================================
+function showStatus(ok, msgKey) {
+  const pill = document.getElementById('statusPill');
+  pill.className = 'show ' + (ok ? 'status-ok' : 'status-err');
+  pill.innerHTML = `<div class="status-dot"></div> ${i18n[lang][msgKey] || (ok ? 'OK' : 'ERROR')}`;
+  setTimeout(() => pill.style.opacity = '0', 4000);
+  setTimeout(() => { pill.style.opacity = ''; pill.className = ''; }, 5000);
 }
 
 // ===================================
-// CART FUNCTIONS (СИНХРОНІЗОВАНІ)
+// FLOATING CTA
 // ===================================
+let floatOpen = false;
+function toggleFloat() {
+  floatOpen = !floatOpen;
+  document.getElementById('floatLinks').classList.toggle('open', floatOpen);
+}
+
+// Графік підтримки: 10:00–22:00. Поза часом — показуємо push про графік
+function isSupportHours() {
+  const h = new Date().getHours();
+  return h >= 10 && h < 22;
+}
+function handleSupportClick() {
+  if (isSupportHours()) {
+    window.open('https://t.me/lspdfrelitestudio', '_blank');
+  } else {
+    document.getElementById('supportScheduleNotif').classList.add('show');
+  }
+}
+function closeSupportSchedule() {
+  document.getElementById('supportScheduleNotif').classList.remove('show');
+}
+
+// Залишаємо toggleFloat для float links (якщо потрібно відкривати dropdown)
+
+// ===================================
+// SCROLL ANIMATIONS
+// ===================================
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ===================================
+// DATA
+// ===================================
+const products = [
+  { id:1, name:'Toyota Camry — Поліція Київ', cat:'car', price:149, badge:'hot', desc:'Toyota Camry у комплектації патрульної поліції Київ. 4K текстури, HiPoly геометрія.', icon:'🚔', bg:'linear-gradient(135deg,#0d1a3a,#0a2050)' },
+  { id:2, name:'Renault Dokker — Поліція Львів', cat:'car', price:129, badge:'new', desc:'Renault Dokker позашляховик Львова. Реальне маркування та мигалки.', icon:'🚗', bg:'linear-gradient(135deg,#1a0d1a,#250a3a)' },
+  { id:3, name:'ВАЗ-2110 — Поліція Одеса', cat:'car', price:89, badge:'sale', oldPrice:120, desc:'Класична ВАЗ-2110 у вінтажному розфарбуванні 90-х. Ностальгія.', icon:'🚙', bg:'linear-gradient(135deg,#0d1a0d,#0a2510)' },
+  { id:4, name:'BMW 520 — Кіберполіція', cat:'car', price:189, badge:'new', desc:'BMW 520d чорний у забарвленні кіберполіції. Преміум деталізація, 4K.', icon:'🚓', bg:'linear-gradient(135deg,#0a0a0a,#1a1a1a)' },
+  { id:5, name:'Volkswagen Tiguan — ДПС', cat:'car', price:169, desc:'Volkswagen Tiguan ДПС з повним оснащенням. Мигалки, рація, логотипи.', icon:'🚕', bg:'linear-gradient(135deg,#1a1a0d,#25200a)' },
+  { id:6, name:'СКІН: Патрульний офіцер 2024', cat:'skin', price:59, badge:'new', desc:'Реалістичний скін у новій формі НПУ 2024 року. 4 варіанти.', icon:'👮', bg:'linear-gradient(135deg,#0a1a1a,#0a2525)' },
+  { id:7, name:'СКІН: Командир підрозділу', cat:'skin', price:79, desc:'Скін старшого офіцера в парадній + повсякденній формі.', icon:'👮‍♂️', bg:'linear-gradient(135deg,#1a0d0a,#2a1510)' },
+  { id:8, name:'ПАКЕТ: Патрульна служба', cat:'pack', price:299, badge:'hot', oldPrice:420, desc:'3 авто + 4 скіни + бонусні звуки сирен. Найпопулярніший пакет!', icon:'📦', bg:'linear-gradient(135deg,#0a0d1a,#10152a)' },
+  { id:9, name:'ПАКЕТ: КОРД Спецпідрозділ', cat:'pack', price:249, desc:'Пакет КОРД: авто, скіни, зброя та спецзнаряддя для рольових ігор.', icon:'🎖', bg:'linear-gradient(135deg,#0d0a0a,#1e1010)' },
+  { id:10, name:'АК-74 — Поліція UA', cat:'weapon', price:69, badge:'new', desc:'АК-74 з поліцейськими маркуваннями та ложе. HiPoly модель.', icon:'🔫', bg:'linear-gradient(135deg,#1a0d0d,#2a1515)' },
+  { id:11, name:'ПМ — Пістолет Макарова', cat:'weapon', price:49, desc:'ПМ з реальними текстурами, анімацією та затворною рамою.', icon:'🔫', bg:'linear-gradient(135deg,#0d0d1a,#151525)' },
+  { id:12, name:'ПАКЕТ: Вся колекція 2024', cat:'pack', price:599, badge:'hot', oldPrice:890, desc:'Повна колекція: всі авто, скіни та зброя 2024 каталогу.', icon:'👑', bg:'linear-gradient(135deg,#1a1400,#2a2200)' },
+];
+
+const models = [
+  { id:'m1', name:'Custom 3D Модель авто', type:'3D Model', price:'від 350 грн', desc:'Повністю кастомна 3D модель авто за вашим вибором. LOD, колізії, анімовані частини.', specs:['LOD x4','Collision','Animated'], icon:'🚔', bg:'linear-gradient(135deg,#0a0e25,#0d1535)' },
+  { id:'m2', name:'EUP Форма підрозділу', type:'EUP Uniform', price:'від 200 грн', desc:'Кастомна EUP форма для вашого LSPDFR або FiveM підрозділу. Нашивки, логотипи.', specs:['EUP','FiveM','4K Textures'], icon:'👮', bg:'linear-gradient(135deg,#0a1a0a,#0d2510)' },
+  { id:'m3', name:'Скін / Лівера на авто', type:'Texture Pack', price:'від 120 грн', desc:'Кастомна лівера та розфарбування на ваше авто. Будь-яке підрозділення чи місто.', specs:['4K','Any Vehicle','Quick'], icon:'🎨', bg:'linear-gradient(135deg,#1a0a0a,#2a1010)' },
+  { id:'m4', name:'Повний пакет підрозділу', type:'Full Pack', price:'від 800 грн', desc:'Авто + форма + лівера + логотипи + бонуси для вашого підрозділу. All-in-one рішення.', specs:['Full Pack','Priority','Support'], icon:'📦', bg:'linear-gradient(135deg,#0a0a0a,#151515)' },
+  { id:'m5', name:'Озброєння (зброя + скін)', type:'Weapon Pack', price:'від 150 грн', desc:'Кастомна зброя для вашого підрозділу: пістолети, автомати, снайперські гвинтівки.', specs:['Weapons','Animations','4K'], icon:'🔫', bg:'linear-gradient(135deg,#1a0d00,#2a1e00)' },
+  { id:'m6', name:'ANPR / MDT скрін текстури', type:'UI Pack', price:'від 80 грн', desc:'Кастомні текстури для ANPR-камер, MDT та інших UI елементів LSPDFR.', specs:['LSPDFR','MDT','ANPR'], icon:'💻', bg:'linear-gradient(135deg,#000a1a,#001025)' },
+];
+
+const faqs = [
+  { q:'Як я отримаю файли після покупки?', a:'Файли з\'являться у вашому особистому кабінеті після підтвердження оплати адміністратором. Також надсилаємо посилання на email.' },
+  { q:'Чи сумісні моди з LSPDFR і FiveM?', a:'Так! Всі моди сумісні з LSPDFR, FiveM (ESX/QBCore) та стандартним режимом GTA 5. Сумісність вказана в описі кожного мода.' },
+  { q:'Як встановити мод?', a:'До кожної покупки додається детальна інструкція. Також ви можете звернутись до нашої підтримки в Telegram — допоможемо безкоштовно.' },
+  { q:'Чи можна замовити кастомний мод?', a:'Так! Переходьте до розділу "Моделі & EUP", натискайте "Замовити кастом" і заповнюйте форму. Ми зв\'яжемось протягом 24 годин.' },
+  { q:'Яка гарантія на моди?', a:'Гарантуємо, що кожен мод працює як описано. Якщо є технічна проблема — вирішимо безкоштовно. Оновлення для нових версій GTA безкоштовні.' },
+  { q:'Яка валюта оплати?', a:'Приймаємо UAH (гривня) через Monobank/ПриватБанк, а також USDT TRC-20 без комісій. Telegram — для індивідуальних домовленостей.' },
+  { q:'Скільки часу займає видача файлів?', a:'Зазвичай до 30 хвилин після підтвердження оплати. У нічний час може займати до кількох годин. Якщо затримка — пишіть у Telegram.' },
+];
+
+// ===================================
+// RENDER PRODUCTS
+// ===================================
+function renderProducts(cat = 'all') {
+  const grid = document.getElementById('productsGrid');
+  const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+  const catNames = { car:'Автомобіль', skin:'Скін', pack:'Пакет', weapon:'Зброя' };
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="product-card" style="animation-delay:${i*0.05}s">
+      <div class="prod-thumb" style="background:${p.bg};position:relative">
+        <span style="position:relative;z-index:1">${p.icon}</span>
+        ${p.badge ? `<span class="prod-badge b-${p.badge}">${p.badge==='hot'?'Хіт':p.badge==='new'?'New':'Sale'}</span>` : ''}
+        <div style="position:absolute;top:0.5rem;right:0.5rem;display:flex;gap:0.3rem;z-index:2">
+          <button class="wishlist-btn" data-product-id="${p.id}" onclick="WISHLIST.toggle(${p.id})" title="Додати до бажань" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);cursor:pointer;font-size:1.1rem;transition:all 0.2s;display:flex;align-items:center;justify-content:center">
+            ${WISHLIST.has(p.id) ? '💖' : '🤍'}
+          </button>
+          <button onclick="QUICK_VIEW.open(${p.id})" title="Швидкий перегляд" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);cursor:pointer;font-size:1rem;transition:all 0.2s;display:flex;align-items:center;justify-content:center">👁️</button>
+        </div>
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">${catNames[p.cat]||''}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-footer">
+          <div class="prod-price">
+            ${p.oldPrice ? `<span class="old-p">${p.oldPrice} грн</span>` : ''}
+            ${p.price} грн
+          </div>
+          <div style="display:flex;gap:0.4rem">
+            <button class="compare-btn" data-product-id="${p.id}" onclick="COMPARE.toggle(${p.id})" title="Порівняти" style="padding:0.45rem 0.7rem;border-radius:5px;border:1px solid var(--border);background:var(--bg3);cursor:pointer;font-size:0.9rem;transition:all 0.2s">📊</button>
+            <button class="add-btn" onclick="addCart(${p.id}, this)" style="flex:1">+ Кошик</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================================
+// RENDER MODELS
+// ===================================
+function renderModels() {
+  const grid = document.getElementById('modelsGrid');
+  grid.innerHTML = models.map(m => `
+    <div class="model-card">
+      <div class="model-thumb" style="background:${m.bg}">
+        <span style="position:relative;z-index:1;filter:drop-shadow(0 0 20px rgba(240,180,41,0.4))">${m.icon}</span>
+        <span class="model-tag">${m.type}</span>
+      </div>
+      <div class="model-body">
+        <div class="model-name">${m.name}</div>
+        <div class="model-desc">${m.desc}</div>
+        <div class="model-specs">
+          ${m.specs.map(s => `<span class="spec-tag">${s}</span>`).join('')}
+        </div>
+        <div class="model-footer">
+          <div class="model-price">${m.price}</div>
+          <button class="commission-btn" onclick="openCommission('${m.id}','${m.name}')">Замовити</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================================
+// RENDER FAQ
+// ===================================
+function renderFAQ() {
+  document.getElementById('faqList').innerHTML = faqs.map((f,i) => `
+    <div class="faq-item" id="faq${i}" onclick="toggleFAQ(${i})">
+      <div class="faq-q">${f.q} <span class="faq-ic">+</span></div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+function toggleFAQ(i) {
+  document.getElementById('faq'+i).classList.toggle('open');
+}
+
+// ===================================
+// FILTERS
+// ===================================
+document.querySelectorAll('.f-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(btn.dataset.cat);
+  });
+});
+
+// ===================================
+// CART
+// ===================================
+let cart = [];
+let activePromo = null;
+const PROMO_CODES = { 'ELITE10':10, 'WELCOME5':5, 'HOT15':15, 'NEW20':20 };
+
 function addCart(id, btnEl) {
-  const products = getProducts(); // Функція яка повертає список товарів
   const p = products.find(x => x.id === id);
   if (!p) return;
-  
   const ex = cart.find(x => x.id === id);
   if (ex) ex.qty++;
-  else cart.push({...p, qty: 1});
-  
-  store.cart = cart;
-  saveStore(store);
+  else cart.push({...p, qty:1});
+
+  // Fly-to-cart animation
+  if (btnEl) {
+    const rect = btnEl.closest('.product-card')?.querySelector('.prod-thumb')?.getBoundingClientRect()
+      || btnEl.getBoundingClientRect();
+    const cartRect = document.getElementById('cartBtn')?.getBoundingClientRect();
+    if (cartRect) {
+      const fly = document.createElement('div');
+      fly.className = 'fly-to-cart-item';
+      fly.textContent = p.icon;
+      fly.style.left = (rect.left + rect.width/2 - 21) + 'px';
+      fly.style.top = (rect.top + rect.height/2 - 21) + 'px';
+      const tx = (cartRect.left + cartRect.width/2) - (rect.left + rect.width/2);
+      const ty = (cartRect.top + cartRect.height/2) - (rect.top + rect.height/2);
+      fly.style.setProperty('--fly-x', tx + 'px');
+      fly.style.setProperty('--fly-y', ty + 'px');
+      document.body.appendChild(fly);
+      setTimeout(() => fly.remove(), 700);
+    }
+  }
+
   updateCart();
-  notify('✅', `«${p.name}» — ${i18n[lang].notify_add}`);
+  notify('✅', `«${p.name}» — додано до кошика!`);
 }
 
 function updateCart() {
@@ -2272,6 +2317,7 @@ function updateCart() {
   if (badge) {
     badge.textContent = cnt;
     badge.style.display = cnt > 0 ? 'flex' : 'none';
+    if (cnt > 0) { badge.classList.add('pulse'); setTimeout(() => badge.classList.remove('pulse'), 400); }
   }
   renderCart();
 }
@@ -2280,47 +2326,35 @@ function renderCart() {
   const body = document.getElementById('cartBody');
   const empty = document.getElementById('cartEmpty');
   const foot = document.getElementById('cartFoot');
-  
-  if (!cart.length) {
-    if (body) body.innerHTML = '';
-    if (empty) empty.classList.remove('hidden');
-    if (foot) foot.classList.add('hidden');
-    return;
-  }
-  
-  if (empty) empty.classList.add('hidden');
-  if (foot) foot.classList.remove('hidden');
-  
-  if (body) {
-    body.innerHTML = cart.map(p => `
-      <div class="cart-item">
-        <div class="ci-icon">${p.icon}</div>
-        <div style="flex:1">
-          <div class="ci-name">${p.name}</div>
-          <div class="ci-price">${p.price} грн × ${p.qty}</div>
-          <div class="qty-wrap">
-            <button class="qty-btn" onclick="cartQty(${p.id}, -1)">−</button>
-            <span class="qty-val">${p.qty}</span>
-            <button class="qty-btn" onclick="cartQty(${p.id}, 1)">+</button>
-          </div>
+  if (!cart.length) { if(body) body.innerHTML=''; if(empty) empty.classList.remove('hidden'); if(foot) foot.classList.add('hidden'); return; }
+  if(empty) empty.classList.add('hidden');
+  if(foot) foot.classList.remove('hidden');
+
+  if (body) body.innerHTML = cart.map(p => `
+    <div class="cart-item">
+      <div class="ci-icon">${p.icon}</div>
+      <div style="flex:1">
+        <div class="ci-name">${p.name}</div>
+        <div class="ci-price">${p.price} грн × <span class="qty-val">${p.qty}</span></div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="cartQty(${p.id}, -1)">−</button>
+          <span class="qty-val">${p.qty}</span>
+          <button class="qty-btn" onclick="cartQty(${p.id}, 1)">+</button>
         </div>
-        <button class="ci-del" onclick="removeCart(${p.id})">✕</button>
       </div>
-    `).join('');
-  }
-  
+      <button class="ci-del" onclick="removeCart(${p.id})" title="Видалити">✕</button>
+    </div>
+  `).join('');
+
   let total = cart.reduce((a, x) => a + x.price * x.qty, 0);
   const discountRow = document.getElementById('cartDiscountRow');
-  
   if (activePromo !== null && discountRow) {
     const discount = total * (activePromo / 100);
     total -= discount;
     discountRow.classList.remove('hidden');
     discountRow.innerHTML = `<span>Промокод −${activePromo}%</span><span>−${Math.round(discount)} грн</span>`;
-  } else if (discountRow) {
-    discountRow.classList.add('hidden');
-  }
-  
+  } else if (discountRow) discountRow.classList.add('hidden');
+
   const cartTotal = document.getElementById('cartTotal');
   const coFinal = document.getElementById('coFinalTotal');
   if (cartTotal) cartTotal.textContent = Math.round(total) + ' грн';
@@ -2332,8 +2366,6 @@ function cartQty(id, delta) {
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-  store.cart = cart;
-  saveStore(store);
   updateCart();
 }
 
@@ -2341,50 +2373,34 @@ function applyPromo() {
   const code = (document.getElementById('promoInput')?.value || '').trim().toUpperCase();
   const okEl = document.getElementById('promoOk');
   const errEl = document.getElementById('promoErr');
-  
   if (!code) {
     activePromo = null;
-    if (okEl) okEl.classList.add('hidden');
-    if (errEl) errEl.classList.add('hidden');
-    renderCart();
-    return;
+    if (okEl) { okEl.classList.add('hidden'); okEl.textContent = ''; }
+    if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+    renderCart(); return;
   }
-  
-  if (store.promos[code] !== undefined) {
-    activePromo = store.promos[code];
-    if (okEl) {
-      okEl.textContent = i18n[lang].promo_ok + ` (−${activePromo}%)`;
-      okEl.classList.remove('hidden');
-    }
+  if (PROMO_CODES[code] !== undefined) {
+    activePromo = PROMO_CODES[code];
+    if (okEl) { okEl.textContent = '✓ Промокод ' + code + ' застосовано (−' + activePromo + '%)'; okEl.classList.remove('hidden'); }
     if (errEl) errEl.classList.add('hidden');
-    notify('✅', i18n[lang].promo_ok);
+    notify('✅', 'Промокод застосовано!');
   } else {
     activePromo = null;
-    if (errEl) {
-      errEl.textContent = i18n[lang].promo_err;
-      errEl.classList.remove('hidden');
-    }
+    if (errEl) { errEl.textContent = 'Невірний промокод'; errEl.classList.remove('hidden'); }
     if (okEl) okEl.classList.add('hidden');
-    notify('⚠', i18n[lang].promo_err);
+    notify('⚠', 'Невірний промокод', true);
   }
-  
   renderCart();
 }
 
-function removeCart(id) {
-  cart = cart.filter(x => x.id !== id);
-  store.cart = cart;
-  saveStore(store);
-  updateCart();
-}
-
+function removeCart(id) { cart = cart.filter(x => x.id !== id); updateCart(); }
 function clearCart() {
   cart = [];
   activePromo = null;
   const promoInp = document.getElementById('promoInput');
   if (promoInp) promoInp.value = '';
-  store.cart = [];
-  saveStore(store);
+  document.getElementById('promoOk')?.classList.add('hidden');
+  document.getElementById('promoErr')?.classList.add('hidden');
   updateCart();
 }
 
@@ -2395,7 +2411,7 @@ function goCheckout() {
   if (!currentUser) {
     closeM('cartModal');
     openM('authModal');
-    notify('⚠', i18n[lang].no_account_error);
+    notify('⚠', 'Увійдіть в акаунт для оформлення замовлення', true);
     return;
   }
   document.getElementById('coName').value = currentUser.name || '';
@@ -2408,94 +2424,141 @@ function goCheckout() {
 let coCurrentStep = 1;
 function coStep(n) {
   coCurrentStep = n;
-  [1, 2, 3].forEach(i => {
-    const el = document.getElementById('co' + i);
-    const st = document.getElementById('cstep' + i);
-    if (el) el.classList.toggle('hidden', i !== n);
-    if (st) {
-      st.classList.remove('active', 'done');
-      if (i < n) st.classList.add('done');
-      else if (i === n) st.classList.add('active');
-    }
+  [1,2,3].forEach(i => {
+    document.getElementById('co'+i).classList.toggle('hidden', i!==n);
+    const s = document.getElementById('cstep'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
   });
+}
+
+let selPayMethod = 'pm1';
+function selPay(id) {
+  selPayMethod = id;
+  document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById(id).classList.add('sel');
+  document.getElementById('monoInfo').style.display = id === 'pm1' ? 'block' : 'none';
+}
+
+function copyCard() {
+  navigator.clipboard.writeText('5375 4141 4141 4141').then(() => notify('📋', 'Номер картки скопійовано!'));
 }
 
 let orderCounter = 1000;
 function confirmOrder() {
   const name = document.getElementById('coName').value.trim();
   const email = document.getElementById('coEmail').value.trim();
-  if (!name || !email) {
-    notify('⚠', 'Заповніть всі поля');
-    return;
-  }
-  
+  if (!name || !email) { notify('⚠','Заповніть ім\'я та email', true); return; }
   orderCounter++;
   document.getElementById('orderNum').textContent = '#' + orderCounter;
-  
-  // Зберігаємо замовлення в store.orders
-  let orderTotal = cart.reduce((a, x) => a + x.price * x.qty, 0);
-  if (activePromo !== null) orderTotal = Math.round(orderTotal * (1 - activePromo / 100));
-  else orderTotal = Math.round(orderTotal);
-  
-  store.orders.push({
-    num: orderCounter,
-    user: currentUser.name,
-    email: currentUser.email,
-    product: cart.map(c => c.name).join(', '),
-    price: orderTotal + ' грн',
-    status: 'pending',
-    date: new Date().toLocaleDateString('uk-UA'),
-    products: [...cart]
-  });
-  
-  // Оновлюємо замовлення користувача
+  // Save order to user
   if (currentUser) {
     if (!currentUser.orders) currentUser.orders = [];
     const items = cart.map(c => c.name).join(', ');
+    let total = cart.reduce((a,x) => a + x.price * x.qty, 0);
+    if (activePromo !== null) total = total * (1 - activePromo / 100);
     currentUser.orders.push({
-      num: orderCounter,
-      name: items,
-      price: orderTotal,
+      num: orderCounter, name: items, price: total,
       date: new Date().toLocaleDateString('uk-UA'),
-      status: 'pending',
-      products: [...cart],
-      file: null
+      status: 'pending', products: [...cart], file: null
     });
-    store.users[currentUser.email] = currentUser;
+    users[email] = { ...currentUser };
+    renderCabOrders();
   }
-  
-  saveStore(store);
-  renderCabOrders();
+  let orderTotal = cart.reduce((a,x) => a + x.price*x.qty, 0);
+  if (activePromo !== null) orderTotal = Math.round(orderTotal * (1 - activePromo/100));
+  else orderTotal = Math.round(orderTotal);
+  // Push to admin orders
+  allOrders.push({
+    num: orderCounter,
+    user: currentUser ? currentUser.name : 'Гість',
+    email: currentUser ? currentUser.email : email,
+    product: cart.map(c=>c.name).join(', '),
+    price: orderTotal + ' грн',
+    status: 'pending'
+  });
   coStep(3);
+}
+
+// ===================================
+// GOOGLE AUTH
+// ===================================
+const GOOGLE_CLIENT_ID = '637144604768-b3rfbbg673ahe3ii0mjuhofn0e7qi7jm.apps.googleusercontent.com';
+
+function initGoogleAuth() {
+  if (typeof google === 'undefined' || !google.accounts?.id || !GOOGLE_CLIENT_ID) {
+    setTimeout(initGoogleAuth, 150); // Чекаємо завантаження скрипта Google
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false
+  });
+  const btnOpts = { type: 'standard', theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 };
+  const loginEl = document.getElementById('googleLoginBtn');
+  const regEl = document.getElementById('googleRegBtn');
+  if (loginEl) google.accounts.id.renderButton(loginEl, btnOpts);
+  if (regEl) google.accounts.id.renderButton(regEl, { ...btnOpts, text: 'signup_with' });
+}
+
+function handleGoogleCredential(response) {
+  try {
+    if (!response?.credential) { notify('⚠', 'Немає даних від Google', true); return; }
+    const b64url = response.credential.split('.')[1];
+    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = b64.length % 4;
+    const padded = pad ? b64 + '='.repeat(4 - pad) : b64;
+    const payload = JSON.parse(atob(padded));
+    const email = payload.email || '';
+    const name = payload.name || payload.given_name || email.split('@')[0];
+    if (!users[email]) users[email] = { name, email, pwd: '[google]', orders: [], regDate: new Date().toLocaleDateString('uk-UA') };
+    currentUser = { ...users[email] };
+    loginDone();
+    closeM('authModal');
+    notify('✅', 'Успішний вхід через Google!');
+  } catch (e) { notify('⚠', 'Помилка входу через Google: ' + (e.message || ''), true); }
 }
 
 // ===================================
 // AUTH
 // ===================================
+const users = {}; // email -> user
+let currentUser = null;
+
 function authTab(tab) {
-  ['login', 'register'].forEach(t => {
-    const tabEl = document.getElementById('tab-' + t);
-    const bodyEl = document.getElementById('body-' + t);
-    if (tabEl) tabEl.classList.toggle('active', t === tab);
-    if (bodyEl) bodyEl.classList.toggle('active', t === tab);
+  ['login','register'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('body-'+t).classList.toggle('active', t===tab);
   });
+}
+
+function checkPwdStrength(v) {
+  const bar = document.getElementById('pwdBarFill');
+  const hint = document.getElementById('pwdHint');
+  let str = 0;
+  if (v.length >= 8) str++;
+  if (/[A-Z]/.test(v)) str++;
+  if (/[0-9]/.test(v)) str++;
+  if (/[^A-Za-z0-9]/.test(v)) str++;
+  const colors = ['var(--danger)','#ff7a3c','var(--gold)','var(--success)'];
+  const labels = ['Слабкий','Середній','Добрий','Сильний'];
+  bar.style.width = (str*25) + '%';
+  bar.style.background = colors[str-1] || 'var(--border)';
+  hint.textContent = str > 0 ? labels[str-1] : '';
 }
 
 function doLogin() {
   const email = document.getElementById('lEmail').value.trim();
   const pwd = document.getElementById('lPwd').value;
-  
-  if (!email || !pwd) {
-    notify('⚠', 'Введіть email та пароль');
-    return;
-  }
-  
-  const user = store.users[email];
+  if (!email || !pwd) { notify('⚠','Введіть email та пароль', true); return; }
+  const user = users[email];
   if (!user || user.pwd !== pwd) {
-    notify('❌', 'Невірний email або пароль');
+    notify('❌','Невірний email або пароль', true);
+    showStatus(false, 'status_err');
     return;
   }
-  
   currentUser = {...user};
   loginDone();
 }
@@ -2503,39 +2566,17 @@ function doLogin() {
 function doRegister() {
   const name = document.getElementById('rName').value.trim();
   const email = document.getElementById('rEmail').value.trim();
+  const tg = document.getElementById('rTg').value.trim();
   const pwd = document.getElementById('rPwd').value;
   const pwd2 = document.getElementById('rPwd2').value;
   const terms = document.getElementById('rTerms').checked;
-  
-  if (!name || !email || !pwd) {
-    notify('⚠', 'Заповніть всі поля');
-    return;
-  }
-  if (pwd !== pwd2) {
-    notify('⚠', 'Паролі не співпадають');
-    return;
-  }
-  if (!terms) {
-    notify('⚠', 'Прийміть умови');
-    return;
-  }
-  if (pwd.length < 8) {
-    notify('⚠', 'Пароль мінімум 8 символів');
-    return;
-  }
-  if (store.users[email]) {
-    notify('⚠', 'Цей email вже зареєстровано');
-    return;
-  }
-  
-  const newUser = {
-    name, email, pwd,
-    orders: [],
-    regDate: new Date().toLocaleDateString('uk-UA')
-  };
-  
-  store.users[email] = newUser;
-  saveStore(store);
+  if (!name || !email || !pwd) { notify('⚠','Заповніть всі поля', true); return; }
+  if (pwd !== pwd2) { notify('⚠','Паролі не співпадають', true); return; }
+  if (!terms) { notify('⚠','Прийміть умови використання', true); return; }
+  if (pwd.length < 8) { notify('⚠','Пароль мінімум 8 символів', true); return; }
+  if (users[email]) { notify('⚠','Цей email вже зареєстровано', true); return; }
+  const newUser = { name, email, tg, pwd, orders: [], regDate: new Date().toLocaleDateString('uk-UA') };
+  users[email] = newUser;
   currentUser = {...newUser};
   loginDone();
 }
@@ -2545,39 +2586,81 @@ function loginDone() {
   closeM('authModal');
   document.getElementById('cabName').textContent = currentUser.name;
   document.getElementById('cabEmail').textContent = currentUser.email;
+  document.getElementById('sName').value = currentUser.name;
+  document.getElementById('sEmail').value = currentUser.email;
+  document.getElementById('sTg').value = currentUser.tg || '';
   renderCabOrders();
-  notify('👮', 'Привіт, ' + currentUser.name + '!');
+  notify('👮','Привіт, ' + currentUser.name + '!');
+  showStatus(true, 'status_ok');
 }
 
 function doLogout() {
   currentUser = null;
   document.body.classList.remove('logged');
   closeM('cabinetModal');
-  notify('👋', i18n[lang].logout_msg);
+  notify('👋', 'До побачення!');
+}
+
+function saveSettings() {
+  if (!currentUser) return;
+  const newName = document.getElementById('sName').value.trim();
+  const newEmail = document.getElementById('sEmail').value.trim();
+  if (!newName || !newEmail) { notify('⚠','Заповніть ім\'я та email', true); return; }
+  currentUser.name = newName;
+  currentUser.email = newEmail;
+  currentUser.tg = document.getElementById('sTg').value.trim();
+  document.getElementById('cabName').textContent = newName;
+  document.getElementById('cabEmail').textContent = newEmail;
+  if (users[newEmail]) users[newEmail] = {...currentUser};
+  notify('✅','Налаштування збережено!');
+}
+
+// ===================================
+// CABINET TABS
+// ===================================
+function cabTab(tab) {
+  document.querySelectorAll('.cab-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cab-section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('cab-'+tab).classList.add('active');
 }
 
 function renderCabOrders() {
   if (!currentUser) return;
   const orders = currentUser.orders || [];
   const list = document.getElementById('orderList');
-  
+  const dlList = document.getElementById('downloadList');
   if (!orders.length) {
-    if (list) list.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Замовлень поки немає</p>';
+    list.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Замовлень поки немає</p>';
+    dlList.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Немає доступних файлів</p>';
     return;
   }
-  
-  if (list) {
-    list.innerHTML = orders.map(o => `
+  list.innerHTML = orders.map(o => `
+    <div class="order-row">
+      <div class="order-icon">📦</div>
+      <div class="order-info">
+        <div class="order-name">${o.name}</div>
+        <div class="order-date">${o.date} · ${o.price} грн</div>
+      </div>
+      <span class="order-status ${o.status==='done'?'s-done':o.status==='pending'?'s-pend':'s-wait'}">
+        ${o.status==='done'?'✓ Виконано':o.status==='pending'?'⏳ Очікує':'❌ Відхилено'}
+      </span>
+      <span class="font-raj" style="font-size:0.8rem;color:var(--text3);">#${o.num}</span>
+    </div>
+  `).join('');
+
+  const doneOrders = orders.filter(o => o.status === 'done' && o.file);
+  if (!doneOrders.length) {
+    dlList.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Немає доступних файлів</p>';
+  } else {
+    dlList.innerHTML = doneOrders.map(o => `
       <div class="order-row">
-        <div class="order-icon">📦</div>
+        <div class="order-icon">📁</div>
         <div class="order-info">
           <div class="order-name">${o.name}</div>
-          <div class="order-date">${o.date} · ${o.price} грн</div>
+          <div class="order-date">${o.date}${o.note ? ' · ' + o.note : ''}</div>
         </div>
-        <span class="order-status ${o.status === 'done' ? 's-done' : 's-pend'}">
-          ${o.status === 'done' ? '✓ Виконано' : '⏳ Очікує'}
-        </span>
-        <span style="font-size:0.8rem;color:var(--text3);">#${o.num}</span>
+        <a href="${o.file}" target="_blank" class="dl-btn">⬇ Завантажити</a>
       </div>
     `).join('');
   }
@@ -2587,6 +2670,8 @@ function renderCabOrders() {
 // ADMIN PANEL
 // ===================================
 const ADMIN_PWD = 'elite2024';
+let adminLogged = false;
+let allOrders = [];
 
 function adminLogin() {
   const pwd = document.getElementById('adminPwd').value;
@@ -2597,287 +2682,333 @@ function adminLogin() {
     renderAdminOrders();
     renderAdminUsers();
     updateAdminStats();
-    notify('🛡', 'Ласкаво просимо, адміне!');
+    notify('🛡','Ласкаво просимо, адміне!');
   } else {
-    notify('❌', 'Невірний пароль');
+    notify('❌','Невірний пароль адміна', true);
+    showStatus(false, 'status_err');
   }
 }
 
 function adminSec(sec) {
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('asec-' + sec).classList.add('active');
+  document.getElementById('asec-'+sec).classList.add('active');
   event.target.classList.add('active');
+  if (sec === 'orders') renderAdminOrders();
+  if (sec === 'users') renderAdminUsers();
+  if (sec === 'stats') updateAdminStats();
 }
 
 function renderAdminOrders() {
   const tbody = document.getElementById('adminOrdersTbody');
-  if (!store.orders.length) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="text-c text-muted" style="padding:1.5rem;">Замовлень поки немає</td></tr>';
+  if (!allOrders.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-c text-muted" style="padding:1.5rem;">Замовлень поки немає</td></tr>';
     return;
   }
-  
-  if (tbody) {
-    tbody.innerHTML = store.orders.map((o, i) => `
-      <tr>
-        <td style="color:var(--accent2);font-size:0.8rem;">#${o.num}</td>
-        <td>${o.user}<br><span style="font-size:0.75rem;color:var(--text3);">${o.email}</span></td>
-        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product}</td>
-        <td style="color:var(--gold);">${o.price}</td>
-        <td><span class="order-status ${o.status === 'done' ? 's-done' : 's-pend'}">${o.status === 'done' ? '✓ Виконано' : '⏳ Очікує'}</span></td>
-        <td>
-          <button class="issue-btn" onclick="quickIssue(${i})" ${o.status === 'done' ? 'disabled' : ''}>
-            ${o.status === 'done' ? '✓ Видано' : 'Видати'}
-          </button>
-        </td>
-      </tr>
-    `).join('');
-  }
-}
-
-function quickIssue(i) {
-  const order = store.orders[i];
-  if (!order) return;
-  
-  const file = prompt('Посилання на файл для: ' + order.user);
-  if (!file) return;
-  
-  store.orders[i].status = 'done';
-  
-  const user = store.users[order.email];
-  if (user && user.orders) {
-    const uo = user.orders.find(o => o.num === order.num);
-    if (uo) {
-      uo.status = 'done';
-      uo.file = file;
-    }
-    store.users[order.email] = user;
-  }
-  
-  saveStore(store);
-  renderAdminOrders();
-  updateAdminStats();
-  
-  if (currentUser && currentUser.email === order.email) {
-    currentUser.orders = user.orders;
-    renderCabOrders();
-  }
-  
-  notify('✅', 'Товар видано ' + order.user);
+  tbody.innerHTML = allOrders.map((o, i) => `
+    <tr>
+      <td style="color:var(--accent2);font-family:'Orbitron',sans-serif;font-size:0.8rem;">#${o.num}</td>
+      <td>${o.user}<br><span style="font-size:0.75rem;color:var(--text3);">${o.email}</span></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product}</td>
+      <td style="color:var(--gold);">${o.price}</td>
+      <td><span class="order-status ${o.status==='done'?'s-done':'s-pend'}">${o.status==='done'?'✓ Виконано':'⏳ Очікує'}</span></td>
+      <td>
+        <button class="issue-btn" id="ob${i}" onclick="quickIssue(${i})" ${o.status==='done'?'disabled':''}>
+          ${o.status==='done'?'✓ Видано':'Видати'}
+        </button>
+      </td>
+    </tr>
+  `).join('');
 }
 
 function renderAdminUsers() {
   const tbody = document.getElementById('adminUsersTbody');
-  const allUsers = Object.values(store.users);
-  
+  const allUsers = Object.values(users);
   if (!allUsers.length) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-c text-muted" style="padding:1.5rem;">Немає користувачів</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="text-c text-muted" style="padding:1.5rem;">Немає користувачів</td></tr>';
     return;
   }
-  
-  if (tbody) {
-    tbody.innerHTML = allUsers.map(u => `
-      <tr>
-        <td style="font-weight:600;">${u.name}</td>
-        <td>${u.email}</td>
-        <td>${(u.orders || []).length}</td>
-        <td style="color:var(--text3);">${u.regDate || '—'}</td>
-      </tr>
-    `).join('');
-  }
+  tbody.innerHTML = allUsers.map(u => `
+    <tr>
+      <td style="font-family:'Rajdhani',sans-serif;font-weight:600;">${u.name}</td>
+      <td>${u.email}</td>
+      <td>${(u.orders||[]).length}</td>
+      <td style="color:var(--text3);">${u.regDate||'—'}</td>
+    </tr>
+  `).join('');
 }
 
 function updateAdminStats() {
-  const doneOrders = store.orders.filter(o => o.status === 'done');
-  const rev = store.orders.reduce((a, o) => a + parseInt(o.price), 0);
-  
-  document.getElementById('statOrders').textContent = store.orders.length;
+  document.getElementById('statOrders').textContent = allOrders.length;
+  const rev = allOrders.reduce((a,o) => a + parseInt(o.price), 0);
   document.getElementById('statRevenue').textContent = rev + ' грн';
-  document.getElementById('statUsers').textContent = Object.keys(store.users).length;
+  document.getElementById('statUsers').textContent = Object.keys(users).length;
+}
+
+function quickIssue(i) {
+  const order = allOrders[i];
+  if (!order) return;
+  const file = prompt('Введіть посилання на файл для: ' + order.user + '\n' + order.product);
+  if (!file) return;
+  allOrders[i].status = 'done';
+  // Update user orders
+  const user = users[order.email];
+  if (user && user.orders) {
+    const uo = user.orders.find(o => o.num === order.num);
+    if (uo) { uo.status = 'done'; uo.file = file; }
+    if (currentUser && currentUser.email === order.email) {
+      currentUser.orders = user.orders;
+      renderCabOrders();
+    }
+  }
+  renderAdminOrders();
+  updateAdminStats();
+  notify('✅', 'Товар видано користувачу ' + order.user + '!');
+}
+
+function issueProduct() {
+  const email = document.getElementById('issueUser').value.trim();
+  const num = document.getElementById('issueOrderNum').value.trim();
+  const file = document.getElementById('issueFile').value.trim();
+  const note = document.getElementById('issueNote').value.trim();
+  if (!email || !num || !file) { notify('⚠','Заповніть всі поля', true); return; }
+  const user = users[email];
+  if (!user) { notify('❌','Користувача не знайдено', true); return; }
+  const orderNum = parseInt(num.replace('#',''));
+  const order = user.orders && user.orders.find(o => o.num === orderNum);
+  if (!order) { notify('❌','Замовлення не знайдено', true); return; }
+  order.status = 'done';
+  order.file = file;
+  if (note) order.note = note;
+  // Update allOrders
+  const ao = allOrders.find(o => o.num === orderNum);
+  if (ao) ao.status = 'done';
+  if (currentUser && currentUser.email === email) {
+    currentUser.orders = user.orders;
+    renderCabOrders();
+  }
+  renderAdminOrders();
+  updateAdminStats();
+  notify('🎁', 'Товар видано успішно! Користувач ' + user.name + ' може завантажити файл.');
+  document.getElementById('issueUser').value='';
+  document.getElementById('issueOrderNum').value='';
+  document.getElementById('issueFile').value='';
+  document.getElementById('issueNote').value='';
 }
 
 // ===================================
-// HELPER FUNCTIONS
+// COMMISSION
 // ===================================
-function getProducts() {
-  return [
-    { id: 1, name: 'Toyota Camry — Поліція Київ', cat: 'car', price: 149, badge: 'hot', desc: '4K текстури', icon: '🚔' },
-    { id: 2, name: 'Renault Dokker — Поліція Львів', cat: 'car', price: 129, badge: 'new', desc: 'Реальне маркування', icon: '🚗' },
-    { id: 3, name: 'ВАЗ-2110 — Поліція Одеса', cat: 'car', price: 89, badge: 'sale', desc: 'Вінтажне', icon: '🚙' },
-    { id: 4, name: 'СКІН: Патрульний офіцер', cat: 'skin', price: 59, badge: 'new', desc: '4 варіанти', icon: '👮' },
-    { id: 5, name: 'ПАКЕТ: Патрульна служба', cat: 'pack', price: 299, badge: 'hot', desc: '3 авто + 4 скіни', icon: '📦' },
-  ];
+let openCommId = null;
+function openCommission(id, name) {
+  openCommId = id;
+  openM('commModal');
+}
+function submitQuick() {
+  const contact = document.getElementById('qContact').value.trim();
+  const details = document.getElementById('qDetails').value.trim();
+  if (!contact || !details) { notify('⚠','Заповніть всі поля', true); return; }
+  closeM('commModal');
+  notify('📨','Запит надіслано! Ми зв\'яжемось протягом 24 годин.');
+}
+
+function closeCommForm() {
+  document.getElementById('commissionForm').classList.remove('open');
+}
+
+function submitCommission() {
+  const name = document.getElementById('comName').value.trim();
+  const contact = document.getElementById('comContact').value.trim();
+  const details = document.getElementById('comDetails').value.trim();
+  if (!name || !contact || !details) { notify('⚠','Заповніть всі поля', true); return; }
+  document.getElementById('commissionForm').classList.remove('open');
+  notify('📨','Заявку надіслано! Очікуйте відповіді в Telegram.');
 }
 
 // ===================================
-// INITIALIZATION
+// MODALS
 // ===================================
-document.addEventListener('DOMContentLoaded', () => {
-  // Завантажуємо тему і мову
-  document.documentElement.setAttribute('data-theme', theme);
-  document.getElementById('themeKnob').textContent = theme === 'dark' ? '🌙' : '☀';
-  
-  // Ініціалізуємо язики
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.toLowerCase().includes(lang === 'uk' ? 'укр' : 'eng'));
-  });
-  
-  // Завантажуємо кошик
-  cart = store.cart || [];
-  updateCart();
-  
-  // Reveal animations
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-  
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-  
-  // Modal close on overlay click
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', (e) => {
-      if (e.target === m) m.classList.remove('open');
-    });
-  });
-  
-  // Filter buttons
-  document.querySelectorAll('.f-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      // Render products (функція renderProducts мае вже бути у вашому коді)
-    });
-  });
-  
-  // Cabinet tabs
-  document.querySelectorAll('.cab-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.cab-tab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.cab-section').forEach(s => s.classList.remove('active'));
-      btn.classList.add('active');
-      const tab = btn.textContent.toLowerCase();
-      if (tab.includes('замовлення')) document.getElementById('cab-orders').classList.add('active');
-      if (tab.includes('завантаження')) document.getElementById('cab-downloads').classList.add('active');
-      if (tab.includes('налаштування')) document.getElementById('cab-settings').classList.add('active');
-    });
-  });
-  
-  // Copy card number
-  window.copyCard = function() {
-    navigator.clipboard.writeText('5375 4141 4141 4141').then(() => {
-      notify('📋', 'Скопійовано!');
-    });
-  };
-  
-  // Payment method selection
-  window.selPay = function(id) {
-    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('sel'));
-    document.getElementById(id).classList.add('sel');
-    document.getElementById('monoInfo').style.display = id === 'pm1' ? 'block' : 'none';
-  };
-  
-  // Support button & schedule
-  const statusPill = document.getElementById('statusPill');
-  if (statusPill) {
-    statusPill.style.display = 'none';
-  }
-  
-  function isSupportHours() {
-    const h = new Date().getHours();
-    return h >= 10 && h < 22;
-  }
-  
-  window.handleSupportClick = function() {
-    if (isSupportHours()) {
-      window.open('https://t.me/lspdfrelitestudio', '_blank');
-    } else {
-      document.getElementById('supportScheduleNotif').classList.add('show');
-    }
-  };
-  
-  window.closeSupportSchedule = function() {
-    document.getElementById('supportScheduleNotif').classList.remove('show');
-  };
-  
-  // FAQ
-  document.querySelectorAll('.faq-item').forEach((item, i) => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('open');
-    });
-  });
-  
-  // Send contact form
-  window.sendContact = function(btn) {
-    const name = document.getElementById('ctName').value.trim();
-    const msg = document.getElementById('ctMsg').value.trim();
-    
-    if (!name || !msg) {
-      notify('⚠', 'Заповніть всі поля');
-      return;
-    }
-    
-    btn.innerHTML = '✅ Надіслано!';
-    btn.disabled = true;
-    notify('📨', 'Повідомлення надіслано!');
-    
-    setTimeout(() => {
-      btn.innerHTML = 'Надіслати';
-      btn.disabled = false;
-      document.getElementById('ctName').value = '';
-      document.getElementById('ctContact').value = '';
-      document.getElementById('ctMsg').value = '';
-    }, 3000);
-  };
-  
-  // Commission form
-  window.submitCommission = function() {
-    const name = document.getElementById('comName').value.trim();
-    const contact = document.getElementById('comContact').value.trim();
-    const details = document.getElementById('comDetails').value.trim();
-    
-    if (!name || !contact || !details) {
-      notify('⚠', 'Заповніть всі поля');
-      return;
-    }
-    
-    document.getElementById('commissionForm').classList.remove('open');
-    notify('📨', 'Заявку надіслано!');
-    
-    // Reset form
-    document.getElementById('comName').value = '';
-    document.getElementById('comContact').value = '';
-    document.getElementById('comDetails').value = '';
-  };
-  
-  window.closeCommForm = function() {
-    document.getElementById('commissionForm').classList.remove('open');
-  };
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// Store reference for window
-window.addCart = addCart;
-window.cartQty = cartQty;
-window.removeCart = removeCart;
-window.clearCart = clearCart;
-window.applyPromo = applyPromo;
-window.goCheckout = goCheckout;
-window.coStep = coStep;
-window.confirmOrder = confirmOrder;
-window.authTab = authTab;
-window.doLogin = doLogin;
-window.doRegister = doRegister;
-window.doLogout = doLogout;
-window.adminLogin = adminLogin;
-window.adminSec = adminSec;
-window.quickIssue = quickIssue;
-window.setLang = setLang;
-window.toggleTheme = toggleTheme;
-window.openM = openM;
-window.closeM = closeM;
-window.notify = notify;
-window.hideNotif = hideNotif;
+// ===================================
+// NOTIFY
+// ===================================
+let notifTimer;
+function notify(icon, text, isError = false) {
+  const el = document.getElementById('notif');
+  document.getElementById('notifIcon').textContent = icon;
+  document.getElementById('notifText').textContent = text;
+  el.style.borderColor = isError ? 'var(--danger)' : 'var(--border2)';
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+function hideNotif() { document.getElementById('notif').classList.remove('show'); }
+
+// ===================================
+// CONTACT FORM
+// ===================================
+function sendContact(btn) {
+  const name = document.getElementById('ctName').value.trim();
+  const contact = document.getElementById('ctContact').value.trim();
+  const msg = document.getElementById('ctMsg').value.trim();
+  if (!name || !msg) { notify('⚠','Заповніть ім\'я та повідомлення', true); return; }
+  btn.innerHTML = '✅ Надіслано!';
+  btn.disabled = true;
+  notify('📨','Повідомлення надіслано! Відповімо якнайшвидше.');
+  setTimeout(() => {
+    btn.innerHTML = '📨 Надіслати';
+    btn.disabled = false;
+    document.getElementById('ctName').value = '';
+    document.getElementById('ctContact').value = '';
+    document.getElementById('ctMsg').value = '';
+  }, 3000);
+}
+
+// ===================================
+// COUNTERS
+// ===================================
+function counter(id, target, suffix='') {
+  const el = document.getElementById(id);
+  let n = 0;
+  const step = target / 60;
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = (Number.isInteger(target) ? Math.floor(n) : n.toFixed(1)) + suffix;
+    if (n >= target) clearInterval(t);
+  }, 20);
+}
+
+// ===================================
+// NAV SCROLL EFFECT
+// ===================================
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.boxShadow = window.scrollY > 50 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+});
+
+// ===================================
+// WISHLIST & COMPARE RENDERING
+// ===================================
+function renderWishlist() {
+  const ids = WISHLIST.getAll();
+  const body = document.getElementById('wishlistBody');
+  const empty = document.getElementById('wishlistEmpty');
+  
+  if (!ids.length) {
+    body.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  empty.style.display = 'none';
+  const items = products.filter(p => ids.includes(p.id));
+  
+  body.innerHTML = items.map(p => `
+    <div style="display:flex;gap:1rem;padding:1rem;background:var(--bg3);border-radius:10px;margin-bottom:0.8rem;border:1px solid var(--border)">
+      <div style="width:80px;height:80px;border-radius:8px;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0">${p.icon}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem">${p.name}</div>
+        <div style="font-size:0.85rem;color:var(--text3);margin-bottom:0.5rem">${p.desc?.substring(0,80)}...</div>
+        <div style="display:flex;gap:0.5rem;align-items:center">
+          <span style="font-size:1.2rem;font-weight:700;color:var(--gold);font-family:'Orbitron',sans-serif">${p.price} грн</span>
+          ${p.oldPrice ? `<span style="font-size:0.9rem;color:var(--text3);text-decoration:line-through">${p.oldPrice} грн</span>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;justify-content:center">
+        <button class="btn btn-primary" onclick="addCart(${p.id}, this);WISHLIST.remove(${p.id});renderWishlist()" style="white-space:nowrap">🛒 В кошик</button>
+        <button class="btn btn-danger-o" onclick="WISHLIST.remove(${p.id});renderWishlist()">🗑️ Видалити</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCompare() {
+  const ids = COMPARE.getAll();
+  const body = document.getElementById('compareBody');
+  const empty = document.getElementById('compareEmpty');
+  
+  if (!ids.length) {
+    body.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  empty.style.display = 'none';
+  const items = products.filter(p => ids.includes(p.id));
+  
+  body.innerHTML = `
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:var(--bg3)">
+            <th style="padding:1rem;text-align:left;border:1px solid var(--border);min-width:150px">Параметр</th>
+            ${items.map(p => `<th style="padding:1rem;text-align:center;border:1px solid var(--border);min-width:200px">${p.name}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:1rem;border:1px solid var(--border);font-weight:600">Зображення</td>
+            ${items.map(p => `<td style="padding:1rem;border:1px solid var(--border);text-align:center"><div style="width:100px;height:100px;margin:0 auto;border-radius:8px;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:3rem">${p.icon}</div></td>`).join('')}
+          </tr>
+          <tr>
+            <td style="padding:1rem;border:1px solid var(--border);font-weight:600">Ціна</td>
+            ${items.map(p => `<td style="padding:1rem;border:1px solid var(--border);text-align:center"><span style="font-size:1.3rem;font-weight:700;color:var(--gold);font-family:'Orbitron',sans-serif">${p.price} грн</span>${p.oldPrice ? `<br><span style="font-size:0.9rem;color:var(--text3);text-decoration:line-through">${p.oldPrice} грн</span>` : ''}</td>`).join('')}
+          </tr>
+          <tr>
+            <td style="padding:1rem;border:1px solid var(--border);font-weight:600">Категорія</td>
+            ${items.map(p => `<td style="padding:1rem;border:1px solid var(--border);text-align:center">${{car:'🚗 Автомобіль',skin:'👮 Скін',pack:'📦 Пакет',weapon:'🔫 Зброя'}[p.cat]}</td>`).join('')}
+          </tr>
+          <tr>
+            <td style="padding:1rem;border:1px solid var(--border);font-weight:600">Опис</td>
+            ${items.map(p => `<td style="padding:1rem;border:1px solid var(--border);font-size:0.85rem;color:var(--text2)">${p.desc}</td>`).join('')}
+          </tr>
+          <tr>
+            <td style="padding:1rem;border:1px solid var(--border);font-weight:600">Дії</td>
+            ${items.map(p => `<td style="padding:1rem;border:1px solid var(--border);text-align:center"><button class="btn btn-primary" onclick="addCart(${p.id}, this)" style="width:100%;margin-bottom:0.5rem">🛒 В кошик</button><button class="btn btn-danger-o" onclick="COMPARE.remove(${p.id});renderCompare()" style="width:100%">Видалити</button></td>`).join('')}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+// Слухачі подій для оновлення модалів
+window.addEventListener('lspdfr:sync', () => {
+  if (document.getElementById('wishlistModal').classList.contains('open')) renderWishlist();
+  if (document.getElementById('compareModal').classList.contains('open')) renderCompare();
+});
+
+// ===================================
+// INIT
+// ===================================
+renderProducts();
+renderModels();
+renderFAQ();
+initGoogleAuth();
+setTimeout(() => { counter('sn1',48,'+'); counter('sn2',1200,'+'); counter('sn3',4.9,'★'); }, 500);
+
+// Додаткові анімації при завантаженні
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.product-card').forEach((el, i) => {
+    el.style.animationDelay = (i * 0.06) + 's';
+  });
+  
+  // Відкриття модалів з рендерингом
+  document.getElementById('wishlistModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'wishlistModal' || e.target.classList.contains('m-close')) return;
+    renderWishlist();
+  });
+  
+  document.getElementById('compareModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'compareModal' || e.target.classList.contains('m-close')) return;
+    renderCompare();
+  });
+});
 </script>
 </body>
 </html>
