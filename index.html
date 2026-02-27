@@ -2441,7 +2441,12 @@ function initGoogleAuth() {
 
 function handleGoogleCredential(response) {
   try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    if (!response?.credential) { notify('⚠', 'Немає даних від Google', true); return; }
+    const b64url = response.credential.split('.')[1];
+    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = b64.length % 4;
+    const padded = pad ? b64 + '='.repeat(4 - pad) : b64;
+    const payload = JSON.parse(atob(padded));
     const email = payload.email || '';
     const name = payload.name || payload.given_name || email.split('@')[0];
     if (!users[email]) users[email] = { name, email, pwd: '[google]', orders: [], regDate: new Date().toLocaleDateString('uk-UA') };
