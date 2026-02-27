@@ -1,0 +1,2842 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSPDFR ELITE STUDIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+/* ===================== THEME VARIABLES ===================== */
+:root {
+  --bg: #07090f;
+  --bg2: #0c1020;
+  --bg3: #0f1628;
+  --surface: rgba(12,16,32,0.9);
+  --surface2: rgba(20,30,60,0.7);
+  --accent: #1a6fff;
+  --accent2: #00c8ff;
+  --accent3: #00e5ff;
+  --gold: #f0b429;
+  --gold2: #ffd700;
+  --danger: #ff3b5c;
+  --success: #00d68f;
+  --text: #dce8ff;
+  --text2: #a0b4d0;
+  --text3: #607090;
+  --border: rgba(26,111,255,0.2);
+  --border2: rgba(26,111,255,0.4);
+  --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  --glow-b: 0 0 30px rgba(26,111,255,0.4);
+  --glow-c: 0 0 30px rgba(0,200,255,0.3);
+  --glow-g: 0 0 20px rgba(240,180,41,0.4);
+  --radius: 10px;
+  --card: rgba(10,15,30,0.85);
+  --nav-bg: rgba(5,8,18,0.95);
+  --white-patch: rgba(255,255,255,0.03);
+}
+
+[data-theme="light"] {
+  --bg: #e8edf8;
+  --bg2: #dde4f5;
+  --bg3: #d0d8ee;
+  --surface: rgba(240,244,255,0.97);
+  --surface2: rgba(220,230,255,0.8);
+  --text: #0e1830;
+  --text2: #3a4e70;
+  --text3: #7080a0;
+  --border: rgba(26,111,255,0.2);
+  --border2: rgba(26,111,255,0.5);
+  --card: rgba(245,248,255,0.95);
+  --nav-bg: rgba(225,232,255,0.97);
+  --white-patch: rgba(255,255,255,0.5);
+  --shadow: 0 8px 40px rgba(0,0,40,0.15);
+}
+
+/* ===================== RESET ===================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Exo 2',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ===================== ANIMATED BACKGROUND ===================== */
+#bg-canvas {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+}
+
+.bg-grid {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity:0.4;
+  animation: gridShift 30s linear infinite;
+}
+[data-theme="light"] .bg-grid { opacity:0.15; }
+
+@keyframes gridShift { to { background-position: 50px 50px; } }
+
+.bg-glow {
+  position:fixed; pointer-events:none; z-index:0; border-radius:50%;
+  filter:blur(80px); animation: floatGlow 12s ease-in-out infinite;
+}
+.bg-glow-1 {
+  width:600px;height:600px; left:-150px; top:-100px;
+  background:radial-gradient(circle,rgba(26,111,255,0.12),transparent 70%);
+  animation-duration:14s;
+}
+.bg-glow-2 {
+  width:500px;height:500px; right:-100px; top:40%;
+  background:radial-gradient(circle,rgba(0,200,255,0.08),transparent 70%);
+  animation-duration:18s; animation-delay:-4s;
+}
+.bg-glow-3 {
+  width:400px;height:400px; left:30%; bottom:-50px;
+  background:radial-gradient(circle,rgba(240,180,41,0.07),transparent 70%);
+  animation-duration:22s; animation-delay:-8s;
+}
+@keyframes floatGlow {
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-40px) scale(1.1);}
+  66%{transform:translate(-20px,30px) scale(0.95);}
+}
+
+/* Floating particles */
+.particle {
+  position:fixed; pointer-events:none; z-index:0;
+  width:2px;height:2px; border-radius:50%;
+  background:var(--accent2);
+  animation:particleFloat linear infinite;
+}
+@keyframes particleFloat {
+  0%{transform:translateY(100vh) translateX(0);opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:0.5;}
+  100%{transform:translateY(-100px) translateX(var(--drift));opacity:0;}
+}
+
+/* Police light sweep */
+.police-sweep {
+  position:fixed; top:0; left:-200%;
+  width:3px; height:100vh;
+  background:linear-gradient(180deg,transparent,rgba(26,111,255,0.4) 30%,rgba(0,200,255,0.6) 50%,rgba(26,111,255,0.4) 70%,transparent);
+  z-index:0; pointer-events:none;
+  animation:sweep 8s linear infinite;
+  box-shadow:0 0 20px rgba(0,200,255,0.4);
+}
+@keyframes sweep { to{left:200%;} }
+
+/* ===================== TYPOGRAPHY ===================== */
+.font-orb { font-family:'Orbitron',sans-serif; }
+.font-raj { font-family:'Rajdhani',sans-serif; }
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--accent); border-radius:3px; }
+
+/* ===================== NAV ===================== */
+#navbar {
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  height:66px;
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center;
+  padding:0 1.5rem;
+  gap:1rem;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.nav-logo {
+  font-family:'Orbitron',sans-serif;
+  font-size:1rem; font-weight:900;
+  letter-spacing:2px;
+  color:var(--accent3);
+  text-shadow:0 0 20px rgba(0,229,255,0.5);
+  white-space:nowrap;
+  text-decoration:none;
+}
+.nav-logo em { color:var(--gold); font-style:normal; }
+
+.nav-links {
+  display:flex; gap:0; list-style:none; flex:1;
+  justify-content:center;
+}
+.nav-links a {
+  color:var(--text2);
+  text-decoration:none;
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.82rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:0.4rem 0.8rem;
+  border-radius:5px;
+  transition:all 0.2s;
+  position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute;
+  bottom:-2px; left:50%; right:50%;
+  height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:2px;
+  transition:all 0.2s;
+}
+.nav-links a:hover { color:var(--accent2); }
+.nav-links a:hover::after { left:10%; right:10%; }
+
+.nav-right {
+  display:flex; align-items:center; gap:0.5rem;
+  flex-shrink:0;
+}
+
+/* Language switcher */
+.lang-sw {
+  display:flex;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.lang-btn {
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.72rem; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+  padding:0.3rem 0.7rem;
+  border:none; background:transparent;
+  color:var(--text3); cursor:pointer;
+  transition:all 0.2s;
+}
+.lang-btn.active {
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+
+/* Theme switcher */
+.theme-sw {
+  width:44px;height:24px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  position:relative; cursor:pointer;
+  display:flex; align-items:center;
+  padding:2px;
+  transition:all 0.3s;
+}
+.theme-sw-knob {
+  width:18px;height:18px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  transition:transform 0.3s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;
+}
+[data-theme="light"] .theme-sw-knob { transform:translateX(20px); }
+
+/* Cart button */
+.cart-btn {
+  position:relative;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:0.4rem 0.9rem;
+  border-radius:6px; cursor:pointer;
+  font-size:1rem; transition:all 0.2s;
+  display:flex;align-items:center;gap:0.4rem;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700; font-size:0.82rem;
+}
+.cart-btn:hover { border-color:var(--accent2); color:var(--accent2); }
+.cart-badge {
+  position:absolute; top:-7px;right:-7px;
+  background:var(--danger);
+  color:#fff;font-size:0.6rem;font-weight:700;
+  width:18px;height:18px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  transition:transform 0.2s;
+}
+.cart-badge.pulse { animation:badgePulse 0.4s ease; }
+@keyframes badgePulse { 0%{transform:scale(1);} 50%{transform:scale(1.4);} 100%{transform:scale(1);} }
+
+/* Auth / Profile buttons */
+.btn {
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700; font-size:0.82rem;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:0.5rem 1.2rem;
+  border-radius:6px; border:none;
+  cursor:pointer; transition:all 0.25s;
+  display:inline-flex;align-items:center;gap:0.4rem;
+  text-decoration:none;
+}
+.btn-glass {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text2);
+}
+.btn-glass:hover { border-color:var(--accent); color:var(--accent2); }
+
+.btn-primary {
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  box-shadow:0 4px 18px rgba(26,111,255,0.45);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,111,255,0.6); }
+
+.btn-gold {
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#0a0e1a;
+  box-shadow:0 4px 18px rgba(240,180,41,0.4);
+}
+.btn-gold:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(240,180,41,0.6); }
+
+.btn-success {
+  background:linear-gradient(135deg,#00c864,var(--success));
+  color:#fff;
+}
+.btn-danger-o {
+  background:transparent;
+  border:1px solid var(--danger);
+  color:var(--danger);
+}
+.btn-danger-o:hover { background:rgba(255,59,92,0.1); }
+
+.show-logged{display:none;} .hide-logged{display:inline-flex;}
+body.logged .show-logged{display:inline-flex;} body.logged .hide-logged{display:none;}
+
+/* ===================== STATUS INDICATOR ===================== */
+#statusPill {
+  position:fixed; top:80px; right:1.5rem; z-index:800;
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.4rem 1rem;
+  border-radius:20px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.75rem; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+  backdrop-filter:blur(10px);
+  transition:all 0.4s;
+  border:1px solid;
+  animation:fadeInDown 0.5s ease;
+}
+.status-ok {
+  background:rgba(0,214,143,0.12);
+  border-color:rgba(0,214,143,0.4);
+  color:var(--success);
+}
+.status-err {
+  background:rgba(255,59,92,0.12);
+  border-color:rgba(255,59,92,0.4);
+  color:var(--danger);
+}
+.status-dot {
+  width:8px;height:8px;border-radius:50%;
+  animation:pulse 1.5s infinite;
+}
+.status-ok .status-dot { background:var(--success); }
+.status-err .status-dot { background:var(--danger); }
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* ===================== SUPPORT BUTTON "Зв'яжіться з нами" — біла іконка повідомлення, слідує за скролом ===================== */
+#floatContact {
+  position:fixed; top:85px; right:1.5rem; z-index:899;
+  display:flex; flex-direction:column; align-items:flex-end; gap:0.6rem;
+  animation:floatSupportIn 0.5s ease;
+}
+@keyframes floatSupportIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+
+.float-main-btn {
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(255,255,255,0.95);
+  color:#0a0e1a;
+  border:2px solid rgba(255,255,255,0.5);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  transition:all 0.3s;
+  animation:floatBounce 3s ease-in-out infinite;
+  backdrop-filter:blur(10px);
+}
+.float-main-btn:hover { transform:scale(1.12); box-shadow:0 6px 30px rgba(0,200,255,0.4); }
+.float-main-btn svg { width:24px; height:24px; fill:currentColor; }
+@keyframes floatBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+
+.float-links {
+  display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end;
+  transform:scale(0.8) translateY(10px);
+  opacity:0; pointer-events:none;
+  transition:all 0.25s cubic-bezier(.34,1.56,.64,1);
+  transform-origin:bottom right;
+}
+.float-links.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+
+.float-link {
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.6rem 1rem;
+  border-radius:30px;
+  text-decoration:none;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;font-size:0.9rem;
+  letter-spacing:0.5px;
+  white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:all 0.2s;
+}
+.float-link:hover { transform:scale(1.04); }
+.float-tg { background:linear-gradient(135deg,#0088cc,#29b6f6); color:#fff; }
+.float-dc { background:linear-gradient(135deg,#5865F2,#7289da); color:#fff; }
+
+/* Push-повідомлення про графік підтримки (поза 10–22) */
+#supportScheduleNotif {
+  position:fixed; top:50%; left:50%; z-index:9999;
+  transform:translate(-50%,-50%) scale(0.85);
+  background:var(--bg2);
+  border:1px solid var(--accent);
+  border-radius:14px;
+  padding:2rem;
+  max-width:360px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  opacity:0; pointer-events:none;
+  transition:all 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+#supportScheduleNotif.show { opacity:1; pointer-events:all; transform:translate(-50%,-50%) scale(1); }
+#supportScheduleNotif .sched-title { font-family:'Orbitron',sans-serif; font-size:1rem; margin-bottom:1rem; color:var(--accent2); }
+#supportScheduleNotif .sched-box { display:flex; align-items:center; gap:1rem; padding:1rem; background:var(--bg3); border-radius:8px; margin-bottom:1rem; }
+#supportScheduleNotif .sched-box .sched-icon { font-size:2rem; }
+#supportScheduleNotif .sched-box .sched-txt { font-size:0.9rem; color:var(--text2); }
+#supportScheduleNotif .sched-box .sched-time { font-family:'Orbitron',sans-serif; color:var(--gold); font-size:1.1rem; }
+#supportScheduleNotif .sched-close { width:100%; padding:0.6rem; border:1px solid var(--border); background:transparent; color:var(--text2); border-radius:6px; cursor:pointer; font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:1px; transition:all 0.2s; }
+#supportScheduleNotif .sched-close:hover { background:var(--bg3); color:var(--accent2); }
+
+/* ===================== FLY-TO-CART ANIMATION ===================== */
+.fly-to-cart-item {
+  position:fixed; z-index:9998; pointer-events:none;
+  width:42px; height:42px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem;
+  background:var(--card);
+  border:2px solid var(--accent);
+  box-shadow:0 4px 24px rgba(26,111,255,0.5);
+  animation:flyToCartAnim 0.65s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+@keyframes flyToCartAnim {
+  0%{opacity:1;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--fly-x),var(--fly-y)) scale(0.2);}
+}
+
+/* ===================== CART PROMO & QUANTITY ===================== */
+.promo-row { display:flex; gap:0.5rem; margin:1rem 0; align-items:stretch; }
+.promo-row input { flex:1; padding:0.7rem 1rem; background:var(--bg3); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:0.9rem; outline:none; font-family:'Exo 2',sans-serif; }
+.promo-row input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(26,111,255,0.15); }
+.promo-row input::placeholder { color:var(--text3); }
+.promo-row button { padding:0.7rem 1.2rem; border-radius:6px; border:1px solid var(--accent); background:rgba(26,111,255,0.12); color:var(--accent2); cursor:pointer; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; }
+.promo-row button:hover { background:var(--accent); color:#fff; }
+.promo-ok { font-size:0.8rem; color:var(--success); margin-top:0.3rem; display:flex; align-items:center; gap:0.3rem; }
+.promo-err { font-size:0.8rem; color:var(--danger); margin-top:0.3rem; }
+.cart-discount-row { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; font-size:0.88rem; color:var(--success); }
+.qty-wrap { display:flex; align-items:center; gap:0.4rem; margin-top:0.5rem; }
+.qty-btn { width:28px; height:28px; border-radius:6px; border:1px solid var(--border); background:var(--bg3); color:var(--text); cursor:pointer; font-size:1rem; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0; }
+.qty-btn:hover { background:var(--accent); border-color:var(--accent); color:#fff; }
+.qty-val { min-width:24px; text-align:center; font-family:'Orbitron',sans-serif; font-size:0.9rem; font-weight:700; }
+
+/* ===================== HERO ===================== */
+#hero {
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 4rem;
+  position:relative; z-index:1;
+}
+
+.hero-badge {
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent2);
+  border:1px solid rgba(0,200,255,0.3);
+  padding:0.4rem 1.2rem;border-radius:20px;
+  margin-bottom:1.5rem;
+  background:rgba(0,200,255,0.06);
+  backdrop-filter:blur(10px);
+  animation:fadeInUp 0.6s ease;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 1.5s infinite;}
+
+.hero-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2.5rem,6vw,5.5rem);
+  font-weight:900; line-height:1.0;
+  margin-bottom:1rem;
+  animation:fadeInUp 0.7s ease;
+}
+.hero-title .t1 { display:block; color:var(--text); }
+.hero-title .t2 {
+  display:block;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  background-size:200%;
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:gradShift 3s linear infinite;
+}
+@keyframes gradShift{0%{background-position:0%}100%{background-position:200%}}
+
+.hero-tagline {
+  font-size:1.05rem;color:var(--text2);
+  max-width:560px;margin:0 auto 0.5rem;
+  line-height:1.7;animation:fadeInUp 0.75s ease;
+}
+
+.hero-sub-tag {
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.78rem;font-weight:600;letter-spacing:2px;
+  color:var(--text3);text-transform:uppercase;
+  margin-bottom:2.5rem;animation:fadeInUp 0.78s ease;
+}
+
+.hero-cta { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeInUp 0.85s ease; }
+
+.hero-stats {
+  display:flex;justify-content:center;gap:0;margin-top:4rem;
+  animation:fadeInUp 1s ease;
+  background:var(--surface);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  max-width:500px;margin:4rem auto 0;
+}
+.hero-stat {
+  flex:1;padding:1.2rem 1rem;text-align:center;
+  border-right:1px solid var(--border);
+}
+.hero-stat:last-child{border-right:none;}
+.stat-n {
+  font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;
+  background:linear-gradient(135deg,var(--accent2),var(--accent3));
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-l {
+  font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);margin-top:0.2rem;
+}
+
+/* ===================== SECTION LAYOUT ===================== */
+section { position:relative; z-index:1; }
+.sec-wrap { padding:5rem 2rem; max-width:1260px; margin:0 auto; }
+.sec-head { text-align:center; margin-bottom:3rem; }
+.sec-tag {
+  font-family:'Rajdhani',sans-serif;font-size:0.7rem;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:0.4rem;
+}
+.sec-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:var(--text);
+}
+.sec-line {
+  width:60px;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  margin:0.8rem auto 0;border-radius:2px;
+}
+
+/* White patch sections */
+.white-section {
+  background:var(--white-patch);
+  backdrop-filter:blur(5px);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+/* ===================== CATALOG ===================== */
+.filters {
+  display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:2.5rem;
+}
+.f-btn {
+  font-family:'Rajdhani',sans-serif;font-size:0.78rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.4rem 1rem;border-radius:5px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text3);cursor:pointer;transition:all 0.2s;
+}
+.f-btn.active,.f-btn:hover {
+  background:rgba(26,111,255,0.15);border-color:var(--accent2);color:var(--accent2);
+}
+
+.products-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:1.5rem;
+}
+
+.product-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:all 0.3s;
+  animation:fadeInUp 0.5s ease both;
+  position:relative;
+}
+.product-card:hover {
+  transform:translateY(-5px);
+  border-color:rgba(0,200,255,0.45);
+  box-shadow:var(--glow-c);
+}
+.product-card::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent2),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.product-card:hover::before { opacity:1; }
+
+/* Product card enhanced hover & stagger */
+.product-card { transform-origin: center bottom; }
+.product-card:hover { transform: translateY(-8px) scale(1.02); }
+@keyframes prodCardIn {
+  from { opacity:0; transform: translateY(40px); }
+  to { opacity:1; transform: translateY(0); }
+}
+.product-card { animation: prodCardIn 0.6s cubic-bezier(.25,.46,.45,.94) both; }
+
+.prod-thumb {
+  width:100%;height:175px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  position:relative;overflow:hidden;
+}
+.prod-thumb::after {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,var(--card));
+}
+
+.prod-badge {
+  position:absolute;top:10px;left:10px;
+  font-family:'Rajdhani',sans-serif;font-size:0.68rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.2rem 0.6rem;border-radius:3px;z-index:1;
+}
+.b-new{background:var(--accent);color:#fff;}
+.b-hot{background:var(--danger);color:#fff;}
+.b-sale{background:var(--gold);color:#0a0e1a;}
+
+.prod-body{padding:1.1rem;}
+.prod-cat {
+  font-family:'Rajdhani',sans-serif;font-size:0.68rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:0.3rem;
+}
+.prod-name {
+  font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
+  color:var(--text);margin-bottom:0.4rem;line-height:1.3;
+}
+.prod-desc { font-size:0.8rem;color:var(--text2);line-height:1.5;margin-bottom:0.9rem; }
+.prod-footer { display:flex;align-items:center;justify-content:space-between; }
+.prod-price { font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--gold); }
+.prod-price .old-p { font-size:0.72rem;color:var(--text3);text-decoration:line-through;display:block;font-family:'Exo 2',sans-serif; }
+.add-btn {
+  font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.45rem 0.9rem;border-radius:5px;
+  border:1px solid var(--accent);
+  background:rgba(26,111,255,0.1);color:var(--accent2);
+  cursor:pointer;transition:all 0.25s cubic-bezier(.25,.46,.45,.94);
+}
+.add-btn:hover { background:var(--accent);color:#fff;box-shadow:var(--glow-b); transform:translateY(-2px); }
+.add-btn:active { transform:translateY(0); }
+
+/* ===================== MODELS/EUP SECTION ===================== */
+.models-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1.5rem;
+}
+.model-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:all 0.3s;
+  position:relative;
+}
+.model-card:hover {
+  transform:translateY(-4px);
+  border-color:rgba(240,180,41,0.5);
+  box-shadow:var(--glow-g);
+}
+
+.model-thumb {
+  width:100%;height:200px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:5rem;
+  position:relative;overflow:hidden;
+}
+.model-tag {
+  position:absolute;top:10px;right:10px;
+  font-family:'Rajdhani',sans-serif;font-size:0.68rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.2rem 0.7rem;border-radius:3px;
+  background:rgba(240,180,41,0.9);color:#0a0e1a;
+}
+.model-body{padding:1.3rem;}
+.model-name { font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.4rem; }
+.model-desc { font-size:0.82rem;color:var(--text2);line-height:1.5;margin-bottom:1rem; }
+.model-specs { display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem; }
+.spec-tag {
+  font-family:'Rajdhani',sans-serif;font-size:0.68rem;font-weight:600;
+  letter-spacing:1px;padding:0.2rem 0.5rem;
+  border-radius:3px;border:1px solid var(--border);
+  color:var(--text3);background:var(--surface2);
+}
+.model-footer{display:flex;align-items:center;justify-content:space-between;}
+.model-price{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:700;color:var(--gold);}
+.commission-btn {
+  font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.5rem 1rem;border-radius:5px;
+  border:1px solid var(--gold);
+  background:rgba(240,180,41,0.1);color:var(--gold);
+  cursor:pointer;transition:all 0.2s;
+}
+.commission-btn:hover { background:var(--gold);color:#0a0e1a; }
+
+/* Commission form */
+.commission-form-wrap {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:2rem;
+  margin-top:2rem;
+  display:none;
+  animation:fadeInUp 0.3s ease;
+}
+.commission-form-wrap.open { display:block; }
+
+/* ===================== ABOUT ===================== */
+.about-grid { display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center; }
+.about-visual {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:2.5rem;text-align:center;position:relative;overflow:hidden;
+}
+.about-visual::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(26,111,255,0.08),transparent 70%);
+  animation:breathe 4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+.about-icon-wrap {
+  font-size:5rem; position:relative;z-index:1;
+  animation:hoverRock 4s ease-in-out infinite;
+}
+@keyframes hoverRock{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+
+.feature-list{display:flex;flex-direction:column;gap:0.7rem;margin-top:1.5rem;}
+.feat {
+  display:flex;align-items:flex-start;gap:0.8rem;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:0.7rem 1rem;
+  transition:all 0.2s;
+}
+.feat:hover{border-color:var(--accent2);background:rgba(0,200,255,0.05);}
+.feat-icon{font-size:1.1rem;margin-top:0.1rem;}
+.feat-text{font-size:0.88rem;color:var(--text2);line-height:1.5;}
+.feat-text strong{color:var(--text);font-size:0.9rem;}
+
+/* ===================== FAQ ===================== */
+.faq-list{display:flex;flex-direction:column;gap:0.7rem;max-width:820px;margin:0 auto;}
+.faq-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:7px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.faq-item.open{border-color:var(--accent2);}
+.faq-q {
+  padding:1.1rem 1.5rem;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:600;
+  color:var(--text);transition:background 0.2s;
+  user-select:none;
+}
+.faq-q:hover{background:rgba(26,111,255,0.04);}
+.faq-ic{color:var(--accent2);font-size:1.2rem;transition:transform 0.3s;flex-shrink:0;}
+.faq-item.open .faq-ic{transform:rotate(45deg);}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s ease,padding 0.35s;
+  padding:0 1.5rem;
+  font-size:0.88rem;color:var(--text2);line-height:1.7;
+}
+.faq-item.open .faq-a{max-height:300px;padding:0 1.5rem 1.2rem;}
+
+/* ===================== CONTACT ===================== */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+.contact-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:2rem;
+}
+.contact-card h3{font-family:'Orbitron',sans-serif;font-size:1.1rem;margin-bottom:0.8rem;color:var(--text);}
+.contact-card p{color:var(--text2);font-size:0.88rem;line-height:1.7;margin-bottom:1.2rem;}
+
+.tg-big {
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.5rem;border-radius:10px;
+  background:linear-gradient(135deg,#0088cc,#29b6f6);
+  color:#fff;text-decoration:none;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
+  transition:all 0.2s;
+  box-shadow:0 4px 24px rgba(0,136,204,0.45);
+  margin-bottom:1rem;
+}
+.tg-big:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(0,136,204,0.6);}
+
+.dc-big {
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.5rem;border-radius:10px;
+  background:linear-gradient(135deg,#5865F2,#7289da);
+  color:#fff;text-decoration:none;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
+  transition:all 0.2s;
+  box-shadow:0 4px 24px rgba(88,101,242,0.45);
+}
+.dc-big:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(88,101,242,0.6);}
+
+/* Form inputs */
+.f-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
+.f-label{
+  font-family:'Rajdhani',sans-serif;font-size:0.7rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--text3);
+}
+.f-input,.f-select,.f-textarea {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:6px;padding:0.8rem 1rem;
+  color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.9rem;
+  outline:none;transition:border-color 0.2s, box-shadow 0.2s;
+  width:100%;
+}
+.f-input::placeholder,.f-textarea::placeholder{color:var(--text3);}
+.f-input:focus,.f-select:focus,.f-textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(26,111,255,0.1);
+}
+.f-select { cursor:pointer; }
+.f-textarea{resize:vertical;min-height:100px;}
+
+/* ===================== MODALS ===================== */
+.modal-overlay {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(10px);
+  z-index:2000;
+  display:none;align-items:center;justify-content:center;
+  padding:1rem;
+  animation:bgFadeIn 0.2s ease;
+}
+.modal-overlay.open{display:flex;}
+@keyframes bgFadeIn{from{opacity:0;}to{opacity:1;}}
+
+.modal {
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:14px;
+  width:100%;max-width:460px;
+  padding:2rem;position:relative;
+  animation:modalIn 0.3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:var(--shadow);
+  max-height:90vh;overflow-y:auto;
+}
+.modal.wide{max-width:680px;}
+.modal.xwide{max-width:900px;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.93) translateY(15px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+.m-close {
+  position:absolute;top:1rem;right:1rem;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:1rem;width:28px;height:28px;
+  border-radius:50%;cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.m-close:hover{background:var(--danger);border-color:var(--danger);color:#fff;}
+
+.m-title{
+  font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;
+  margin-bottom:1.5rem;padding-right:2rem;color:var(--text);
+}
+
+/* Auth tabs */
+.a-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
+.a-tab {
+  font-family:'Rajdhani',sans-serif;font-size:0.83rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:0.7rem 1.5rem;background:none;border:none;
+  color:var(--text3);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all 0.2s;
+}
+.a-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+
+.auth-body{display:none;}
+.auth-body.active{display:flex;flex-direction:column;gap:0.9rem;}
+
+/* Input with icon */
+.inp-wrap{position:relative;}
+.inp-icon{
+  position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:0.95rem;
+}
+.inp-wrap .f-input{padding-left:2.5rem;}
+
+/* Password strength */
+.pwd-strength{height:3px;border-radius:2px;margin-top:0.3rem;transition:all 0.3s;background:var(--border);}
+.pwd-strength-bar{height:100%;border-radius:2px;transition:all 0.3s;}
+
+/* Auth extras */
+.auth-divider{
+  text-align:center;position:relative;margin:0.5rem 0;
+  font-size:0.75rem;color:var(--text3);
+}
+.auth-divider::before,.auth-divider::after{
+  content:'';position:absolute;top:50%;width:43%;height:1px;background:var(--border);
+}
+.auth-divider::before{left:0;}
+.auth-divider::after{right:0;}
+
+.auth-link{background:none;border:none;color:var(--accent2);cursor:pointer;font-size:0.82rem;font-family:'Exo 2',sans-serif;}
+.auth-link:hover{text-decoration:underline;}
+
+/* Google Sign-In button container */
+.google-btn-container { min-height:44px; display:flex; align-items:center; justify-content:center; }
+.google-btn-container iframe { margin:0 auto; }
+
+/* ===================== CABINET ===================== */
+.cab-profile-bar {
+  display:flex;align-items:center;gap:1rem;
+  padding-bottom:1.2rem;border-bottom:1px solid var(--border);
+  margin-bottom:1.2rem;
+}
+.cab-avatar {
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;flex-shrink:0;
+  box-shadow:var(--glow-b);
+}
+.cab-username{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;}
+.cab-email{font-size:0.78rem;color:var(--text3);}
+.cab-badge{
+  margin-left:auto;
+  font-family:'Rajdhani',sans-serif;font-size:0.68rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.2rem 0.6rem;border-radius:3px;
+  background:rgba(0,214,143,0.15);color:var(--success);border:1px solid rgba(0,214,143,0.3);
+}
+
+.cab-nav{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.cab-tab {
+  font-family:'Rajdhani',sans-serif;font-size:0.76rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.45rem 0.9rem;
+  border:1px solid var(--border);border-radius:5px;
+  background:transparent;color:var(--text3);cursor:pointer;transition:all 0.2s;
+}
+.cab-tab.active{background:rgba(26,111,255,0.15);border-color:var(--accent);color:var(--accent2);}
+
+.cab-section{display:none;}
+.cab-section.active{display:block;}
+
+.order-row {
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:7px;padding:1rem;margin-bottom:0.7rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  transition:border-color 0.2s;
+}
+.order-row:hover{border-color:var(--accent);}
+.order-icon{font-size:2rem;flex-shrink:0;}
+.order-info{flex:1;}
+.order-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:0.95rem;}
+.order-date{font-size:0.75rem;color:var(--text3);margin-top:0.2rem;}
+.order-status{
+  font-family:'Rajdhani',sans-serif;font-size:0.7rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.25rem 0.6rem;border-radius:3px;
+}
+.s-done{background:rgba(0,214,143,0.12);color:var(--success);}
+.s-pend{background:rgba(240,180,41,0.12);color:var(--gold);}
+.s-wait{background:rgba(255,59,92,0.12);color:var(--danger);}
+
+.dl-btn{
+  font-family:'Rajdhani',sans-serif;font-size:0.72rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.3rem 0.7rem;border-radius:4px;
+  border:1px solid var(--success);background:rgba(0,214,143,0.1);
+  color:var(--success);cursor:pointer;transition:all 0.2s;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.3rem;
+}
+.dl-btn:hover{background:var(--success);color:#0a0e1a;}
+
+/* ===================== ADMIN PANEL ===================== */
+.admin-wrap { display:grid;grid-template-columns:220px 1fr;gap:1.5rem; }
+.admin-sidebar {
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1rem;
+  display:flex;flex-direction:column;gap:0.3rem;
+}
+.admin-nav-btn {
+  font-family:'Rajdhani',sans-serif;font-size:0.8rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.6rem 1rem;border-radius:5px;
+  background:transparent;border:none;
+  color:var(--text3);cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:0.6rem;
+  transition:all 0.2s;
+}
+.admin-nav-btn:hover,.admin-nav-btn.active{
+  background:rgba(26,111,255,0.12);color:var(--accent2);
+}
+.admin-main{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th{
+  font-family:'Rajdhani',sans-serif;font-size:0.72rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text3);padding:0.6rem;
+  border-bottom:1px solid var(--border);text-align:left;
+}
+.admin-table td{
+  padding:0.7rem;font-size:0.85rem;
+  border-bottom:1px solid rgba(26,111,255,0.08);
+  color:var(--text2);
+}
+.admin-table tr:hover td{background:rgba(26,111,255,0.04);}
+
+.issue-btn {
+  font-family:'Rajdhani',sans-serif;font-size:0.7rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0.25rem 0.6rem;border-radius:4px;
+  border:1px solid var(--success);background:rgba(0,214,143,0.1);
+  color:var(--success);cursor:pointer;transition:all 0.2s;
+}
+.issue-btn:hover{background:var(--success);color:#0a0e1a;}
+.issue-btn:disabled{opacity:0.4;cursor:default;}
+
+/* ===================== CART ===================== */
+.cart-item {
+  display:flex;align-items:center;gap:0.9rem;
+  padding:0.9rem 0;border-bottom:1px solid var(--border);
+}
+.ci-icon{font-size:2rem;flex-shrink:0;}
+.ci-name{font-family:'Rajdhani',sans-serif;font-weight:600;}
+.ci-price{font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--gold);}
+.ci-del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;margin-left:auto;}
+
+.cart-total-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.9rem 0;border-top:1px solid var(--border);margin-top:0.5rem;
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+}
+.cart-total-price{font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold);}
+
+/* ===================== CHECKOUT ===================== */
+.checkout-steps{display:flex;gap:0;margin-bottom:2rem;}
+.co-step{
+  flex:1;text-align:center;padding:0.6rem;
+  font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--text3);
+  border-bottom:2px solid var(--border);transition:all 0.3s;
+}
+.co-step.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+.co-step.done{color:var(--success);border-bottom-color:var(--success);}
+
+.pay-methods{display:flex;flex-direction:column;gap:0.6rem;margin:1rem 0;}
+.pay-card {
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem;border:1px solid var(--border);border-radius:7px;
+  cursor:pointer;transition:all 0.2s;background:transparent;
+  color:var(--text);text-align:left;width:100%;
+}
+.pay-card:hover,.pay-card.sel{
+  border-color:var(--accent);background:rgba(26,111,255,0.07);
+}
+.pay-card.sel::before{content:'✓ ';color:var(--success);}
+.pay-icon{font-size:1.7rem;}
+.pay-label{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.95rem;}
+.pay-sub{font-size:0.78rem;color:var(--text3);}
+
+/* Monobank card area */
+.mono-card {
+  background:linear-gradient(135deg,#1a1a1a,#2d2d2d);
+  border:1px solid rgba(0,200,255,0.3);
+  border-radius:12px;padding:1.5rem;margin:1rem 0;
+  position:relative;overflow:hidden;
+}
+.mono-card::before{
+  content:''; position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,200,255,0.05),transparent);
+}
+.mono-logo{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:900;color:#fff;margin-bottom:1rem;}
+.mono-num{
+  font-family:'Orbitron',sans-serif;font-size:1rem;
+  letter-spacing:3px;color:#fff;margin-bottom:0.5rem;
+}
+.mono-owner{font-size:0.8rem;color:rgba(255,255,255,0.6);}
+.mono-copy{
+  position:absolute;top:1rem;right:1rem;
+  font-family:'Rajdhani',sans-serif;font-size:0.72rem;font-weight:700;
+  padding:0.3rem 0.6rem;border-radius:4px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;cursor:pointer;transition:all 0.2s;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.mono-copy:hover{background:rgba(255,255,255,0.2);}
+
+.confirm-sum{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:7px;padding:1rem;margin:1rem 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.confirm-amount{font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold);}
+
+/* ===================== SUCCESS ===================== */
+.success-wrap{text-align:center;padding:2rem 0;}
+.success-icon{font-size:4rem;animation:popIn 0.5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{0%{transform:scale(0);}100%{transform:scale(1);}}
+
+/* ===================== NOTIFICATION ===================== */
+.notif {
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(200%);
+  min-width:280px;max-width:380px;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:10px;padding:1rem 1.3rem;
+  z-index:9999;
+  display:flex;align-items:center;gap:0.8rem;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+  box-shadow:var(--shadow);
+  transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);
+  backdrop-filter:blur(20px);
+}
+.notif.show{transform:translateX(-50%) translateY(0);}
+.notif-icon{font-size:1.3rem;flex-shrink:0;}
+.notif-text{flex:1;}
+.notif-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.9rem;}
+
+/* ===================== FOOTER ===================== */
+footer {
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:3rem 2rem 1.5rem;
+  text-align:center;position:relative;z-index:1;
+}
+.footer-logo{
+  font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;
+  color:var(--accent3);text-shadow:0 0 20px rgba(0,229,255,0.4);
+}
+.footer-links{
+  display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
+  margin:1.5rem 0;
+}
+.footer-links a{
+  color:var(--text3);font-size:0.82rem;text-decoration:none;
+  transition:color 0.2s;
+}
+.footer-links a:hover{color:var(--accent2);}
+
+/* ===================== UTILITIES ===================== */
+.hidden{display:none!important;}
+.text-c{text-align:center;}
+.text-gold{color:var(--gold);}
+.text-muted{color:var(--text3);}
+.mt-1{margin-top:0.5rem;} .mt-2{margin-top:1rem;} .mt-3{margin-top:1.5rem;}
+.mb-1{margin-bottom:0.5rem;} .mb-2{margin-bottom:1rem;}
+.flex-bc{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+.divider{height:1px;background:var(--border);margin:1rem 0;}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+
+/* Scroll animations */
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-2{opacity:0;transform:translateY(20px) scale(0.98);transition:all 0.8s cubic-bezier(.25,.46,.45,.94);}
+.reveal-2.visible{opacity:1;transform:translateY(0) scale(1);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:all 0.7s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:all 0.7s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;}
+  .admin-wrap{grid-template-columns:1fr;}
+  .admin-sidebar{flex-direction:row;flex-wrap:wrap;}
+}
+@media(max-width:600px){
+  .hero-stats{flex-direction:column;gap:0;}
+  .hero-stat{border-right:none;border-bottom:1px solid var(--border);}
+  .hero-stat:last-child{border-bottom:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- BG EFFECTS -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-3"></div>
+<div class="police-sweep"></div>
+<div id="particles-wrap"></div>
+
+<!-- STATUS PILL -->
+<div id="statusPill"></div>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">LSPDFR<em>★</em>ELITE</a>
+  <ul class="nav-links">
+    <li><a href="#catalog" data-i18n="nav_catalog">Каталог</a></li>
+    <li><a href="#models" data-i18n="nav_models">Моделі / EUP</a></li>
+    <li><a href="#about" data-i18n="nav_about">Про нас</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Контакт</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-sw">
+      <button class="lang-btn active" onclick="setLang('uk')">УКР</button>
+      <button class="lang-btn" onclick="setLang('en')">ENG</button>
+    </div>
+    <button class="theme-sw" onclick="toggleTheme()" title="Змінити тему">
+      <div class="theme-sw-knob" id="themeKnob">🌙</div>
+    </button>
+    <button class="cart-btn" id="cartBtn" onclick="openM('cartModal')">
+      🛒 <span id="cartText">Кошик</span>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+    <button class="btn btn-glass hide-logged" onclick="openM('authModal')" data-i18n="btn_login">Увійти</button>
+    <button class="btn btn-primary show-logged" onclick="openM('cabinetModal')">👤 <span data-i18n="btn_cabinet">Кабінет</span></button>
+    <button class="btn btn-glass" onclick="openM('adminModal')" title="Адмін" style="font-size:0.75rem;padding:0.4rem 0.7rem;">⚙ ADMIN</button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span data-i18n="hero_badge">Ukraine Police Mods for GTA 5 • LSPDFR</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="t1">LSPDFR ELITE</span>
+      <span class="t2">STUDIO</span>
+    </h1>
+    <p class="hero-tagline" data-i18n="hero_tagline">Преміальні моделі поліції України для GTA 5. Реалізм, деталізація, якість.</p>
+    <p class="hero-sub-tag" data-i18n="hero_subtag">Офіційний магазин • Швидка доставка • Підтримка 24/7</p>
+    <div class="hero-cta">
+      <a href="#catalog" class="btn btn-primary">🚔 <span data-i18n="btn_catalog">Переглянути каталог</span></a>
+      <a href="#models" class="btn btn-gold">🎨 <span data-i18n="btn_models">Моделі & EUP</span></a>
+      <a href="#about" class="btn btn-glass" data-i18n="btn_about">Про нас</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="stat-n" id="sn1">0</div><div class="stat-l" data-i18n="stat_mods">Модів</div></div>
+      <div class="hero-stat"><div class="stat-n" id="sn2">0</div><div class="stat-l" data-i18n="stat_clients">Клієнтів</div></div>
+      <div class="hero-stat"><div class="stat-n" id="sn3">0</div><div class="stat-l" data-i18n="stat_rating">Рейтинг</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATALOG ===================== -->
+<section id="catalog" class="white-section">
+  <div class="sec-wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">▌ <span data-i18n="sec_shop">Магазин</span></div>
+      <h2 class="sec-title" data-i18n="sec_catalog">Каталог модів</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="filters reveal">
+      <button class="f-btn active" data-cat="all" data-i18n="cat_all">Всі</button>
+      <button class="f-btn" data-cat="car" data-i18n="cat_car">Автомобілі</button>
+      <button class="f-btn" data-cat="skin" data-i18n="cat_skin">Скіни</button>
+      <button class="f-btn" data-cat="pack" data-i18n="cat_pack">Паки</button>
+      <button class="f-btn" data-cat="weapon" data-i18n="cat_weapon">Зброя</button>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== MODELS / EUP ===================== -->
+<section id="models">
+  <div class="sec-wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">▌ <span data-i18n="sec_commission">Комісійні замовлення</span></div>
+      <h2 class="sec-title" data-i18n="sec_models">Моделі & EUP Форми</h2>
+      <div class="sec-line"></div>
+      <p style="color:var(--text2);font-size:0.9rem;max-width:600px;margin:1rem auto 0;line-height:1.7;" data-i18n="models_desc">
+        Замовте кастомну 3D модель або EUP форму для вашого підрозділу. Реалістична деталізація, строки 3–10 днів.
+      </p>
+    </div>
+    <div class="models-grid reveal" id="modelsGrid"></div>
+
+    <div class="commission-form-wrap" id="commissionForm">
+      <h3 class="font-orb" style="font-size:1rem;margin-bottom:1.5rem;color:var(--text);" data-i18n="form_commission_title">📋 Заявка на кастомне замовлення</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_name">Ваше ім'я / нік</label>
+          <input class="f-input" type="text" placeholder="Officer_Mykhailo" id="comName">
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_contact">Telegram / Discord</label>
+          <input class="f-input" type="text" placeholder="@username" id="comContact">
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_type">Тип замовлення</label>
+          <select class="f-select f-input" id="comType">
+            <option value="" data-i18n="form_choose">Оберіть...</option>
+            <option value="car" data-i18n="opt_car">3D Модель авто</option>
+            <option value="eup" data-i18n="opt_eup">EUP Форма</option>
+            <option value="texture" data-i18n="opt_texture">Текстури / Скін</option>
+            <option value="other" data-i18n="opt_other">Інше</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_budget">Бюджет (грн)</label>
+          <input class="f-input" type="text" placeholder="500–2000" id="comBudget">
+        </div>
+        <div class="f-group" style="grid-column:1/-1;">
+          <label class="f-label" data-i18n="form_details">Деталі замовлення</label>
+          <textarea class="f-textarea" rows="4" placeholder="Опишіть що потрібно: марка авто, підрозділ, кольори, логотипи..." id="comDetails"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.8rem;margin-top:1rem;justify-content:flex-end;">
+        <button class="btn btn-glass" onclick="closeCommForm()">Скасувати</button>
+        <button class="btn btn-gold" onclick="submitCommission()">📨 <span data-i18n="btn_send">Надіслати заявку</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about" class="white-section">
+  <div class="sec-wrap">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-icon-wrap">🚔</div>
+        <br>
+        <h3 class="font-orb" style="color:var(--accent2);font-size:1rem;" data-i18n="about_studio">LSPDFR ELITE STUDIO</h3>
+        <p style="color:var(--text3);font-size:0.82rem;margin-top:0.4rem;" data-i18n="about_tagline">Офіційний магазин преміум контенту</p>
+        <br>
+        <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+          <div style="text-align:center;padding:0.8rem 1.2rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;">
+            <div class="font-orb" style="font-size:1.3rem;color:var(--accent2);">48+</div>
+            <div style="font-size:0.7rem;color:var(--text3);" data-i18n="about_mods">модів</div>
+          </div>
+          <div style="text-align:center;padding:0.8rem 1.2rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;">
+            <div class="font-orb" style="font-size:1.3rem;color:var(--gold);">4.9★</div>
+            <div style="font-size:0.7rem;color:var(--text3);" data-i18n="about_rating">рейтинг</div>
+          </div>
+          <div style="text-align:center;padding:0.8rem 1.2rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;">
+            <div class="font-orb" style="font-size:1.3rem;color:var(--success);">1.2k+</div>
+            <div style="font-size:0.7rem;color:var(--text3);" data-i18n="about_clients">клієнтів</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="sec-tag" style="margin-bottom:0.4rem;">▌ <span data-i18n="sec_about">Хто ми</span></p>
+        <h2 class="sec-title" style="text-align:left;margin-bottom:1rem;" data-i18n="about_title">Про нас</h2>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.92rem;margin-bottom:0.8rem;" data-i18n="about_p1">
+          LSPDFR ELITE STUDIO — команда професійних 3D моделерів та скінерів, що спеціалізується на реалістичних модах поліції України для GTA 5.
+        </p>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.92rem;margin-bottom:1.2rem;" data-i18n="about_p2">
+          Кожна модель створена на основі реальних фотографій, офіційної документації та консультацій з правоохоронцями.
+        </p>
+        <div class="feature-list">
+          <div class="feat"><span class="feat-icon">🎯</span><div class="feat-text"><strong data-i18n="feat1_t">Максимальна деталізація</strong><br><span data-i18n="feat1_d">Реалістична геометрія та 4K текстури</span></div></div>
+          <div class="feat"><span class="feat-icon">⚡</span><div class="feat-text"><strong data-i18n="feat2_t">Швидка доставка</strong><br><span data-i18n="feat2_d">Файли доступні одразу після підтвердження</span></div></div>
+          <div class="feat"><span class="feat-icon">🔄</span><div class="feat-text"><strong data-i18n="feat3_t">Оновлення безплатно</strong><br><span data-i18n="feat3_d">Підтримка нових версій GTA 5 та LSPDFR</span></div></div>
+          <div class="feat"><span class="feat-icon">🎮</span><div class="feat-text"><strong data-i18n="feat4_t">Широка сумісність</strong><br><span data-i18n="feat4_d">LSPDFR, FiveM (ESX/QBCore), Singleplayer</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq">
+  <div class="sec-wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">▌ FAQ</div>
+      <h2 class="sec-title" data-i18n="sec_faq">Часті запитання</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="faq-list reveal" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" class="white-section">
+  <div class="sec-wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">▌ <span data-i18n="sec_contact">Зв'язок</span></div>
+      <h2 class="sec-title" data-i18n="contact_title">Контакти</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card reveal">
+        <h3 data-i18n="contact_reach">Зв'яжіться з нами</h3>
+        <p data-i18n="contact_desc">Питання про моди, замовлення, або хочете замовити щось унікальне? Ми завжди на зв'язку!</p>
+        <a href="https://t.me/lspdfrelitestudio" target="_blank" class="tg-big">
+          <span style="font-size:1.5rem;">✈</span>
+          <div>
+            <div style="font-size:1rem;">Telegram</div>
+            <div style="font-size:0.75rem;opacity:0.8;">@lspdfrelitestudio</div>
+          </div>
+        </a>
+        <a href="https://discord.gg/lspdfrelite" target="_blank" class="dc-big">
+          <span style="font-size:1.5rem;">🎮</span>
+          <div>
+            <div style="font-size:1rem;">Discord Server</div>
+            <div style="font-size:0.75rem;opacity:0.8;">discord.gg/lspdfrelite</div>
+          </div>
+        </a>
+      </div>
+      <div class="contact-card reveal">
+        <h3 data-i18n="contact_form">Написати напряму</h3>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_name">Ім'я</label>
+          <input class="f-input" type="text" placeholder="Ваше ім'я" id="ctName">
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_contact_label">Email або Telegram</label>
+          <input class="f-input" type="text" placeholder="email@gmail.com або @username" id="ctContact">
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_msg">Повідомлення</label>
+          <textarea class="f-textarea" placeholder="Ваше запитання..." id="ctMsg"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="sendContact(this)">📨 <span data-i18n="btn_send_msg">Надіслати</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-logo">LSPDFR★ELITE STUDIO</div>
+  <p style="color:var(--text3);font-size:0.85rem;margin-top:0.5rem;" data-i18n="footer_desc">Преміальні моди поліції України для GTA 5</p>
+  <div class="footer-links">
+    <a href="#catalog" data-i18n="nav_catalog">Каталог</a>
+    <a href="#models" data-i18n="nav_models">Моделі</a>
+    <a href="#about" data-i18n="nav_about">Про нас</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact" data-i18n="nav_contact">Контакт</a>
+  </div>
+  <p style="color:var(--text3);font-size:0.75rem;margin-top:1rem;">© 2024 LSPDFR ELITE STUDIO — всі права захищені</p>
+</footer>
+
+<!-- ===================== SUPPORT BUTTON "Зв'яжіться з нами" — біла іконка повідомлення ===================== -->
+<div id="floatContact" title="Зв'яжіться з нами">
+  <div class="float-links" id="floatLinks">
+    <a href="https://t.me/lspdfrelitestudio" target="_blank" class="float-link float-tg">
+      <span>✈</span> Telegram
+    </a>
+    <a href="https://discord.gg/lspdfrelite" target="_blank" class="float-link float-dc">
+      <span>🎮</span> Discord
+    </a>
+  </div>
+  <button class="float-main-btn" onclick="handleSupportClick()" id="floatBtn" aria-label="Зв'яжіться з нами">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg>
+  </button>
+</div>
+
+<!-- Push-повідомлення про графік підтримки (поза 10:00–22:00) -->
+<div id="supportScheduleNotif">
+  <div class="sched-title">⏰ Графік роботи підтримки</div>
+  <div class="sched-box">
+    <span class="sched-icon">💬</span>
+    <div>
+      <div class="sched-txt">Ми відповідаємо на запити</div>
+      <div class="sched-time">10:00 — 22:00</div>
+    </div>
+  </div>
+  <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;line-height:1.6;">Напишіть нам у робочий час або залиште повідомлення в Telegram — ми відповімо найближчим часом.</p>
+  <button class="sched-close" onclick="closeSupportSchedule()">Зрозуміло</button>
+</div>
+
+<!-- ===================== NOTIFICATION ===================== -->
+<div class="notif" id="notif">
+  <span class="notif-icon" id="notifIcon">✅</span>
+  <span class="notif-text" id="notifText"></span>
+  <button class="notif-close" onclick="hideNotif()">✕</button>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="m-close" onclick="closeM('authModal')">✕</button>
+    <div class="m-title">🔐 <span data-i18n="auth_title">Авторизація</span></div>
+    <div class="a-tabs">
+      <button class="a-tab active" id="tab-login" onclick="authTab('login')" data-i18n="tab_login">Увійти</button>
+      <button class="a-tab" id="tab-reg" onclick="authTab('register')" data-i18n="tab_reg">Реєстрація</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-body active" id="body-login">
+      <div class="f-group">
+        <label class="f-label" data-i18n="form_email">Email</label>
+        <div class="inp-wrap">
+          <span class="inp-icon">📧</span>
+          <input class="f-input" type="email" id="lEmail" placeholder="you@email.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label" data-i18n="form_pass">Пароль</label>
+        <div class="inp-wrap">
+          <span class="inp-icon">🔒</span>
+          <input class="f-input" type="password" id="lPwd" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doLogin()" data-i18n="btn_login_do">Увійти</button>
+      <div class="auth-divider">або</div>
+      <div id="googleLoginBtn" class="google-btn-container"></div>
+      <p class="text-c" style="font-size:0.8rem;color:var(--text3);">
+        <span data-i18n="no_account">Немає акаунту?</span>
+        <button class="auth-link" onclick="authTab('register')" data-i18n="do_reg">Зареєструватись</button>
+      </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="auth-body" id="body-register">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_username">Нікнейм</label>
+          <div class="inp-wrap">
+            <span class="inp-icon">👤</span>
+            <input class="f-input" type="text" id="rName" placeholder="Officer_Name">
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_email">Email</label>
+          <div class="inp-wrap">
+            <span class="inp-icon">📧</span>
+            <input class="f-input" type="email" id="rEmail" placeholder="you@email.com">
+          </div>
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Telegram (необов'язково)</label>
+        <div class="inp-wrap">
+          <span class="inp-icon">✈</span>
+          <input class="f-input" type="text" id="rTg" placeholder="@username">
+        </div>
+      </div>
+      <div class="f-group">
+        <label class="f-label" data-i18n="form_pass">Пароль</label>
+        <div class="inp-wrap">
+          <span class="inp-icon">🔒</span>
+          <input class="f-input" type="password" id="rPwd" placeholder="Мін. 8 символів" oninput="checkPwdStrength(this.value)">
+        </div>
+        <div class="pwd-strength" id="pwdBar"><div class="pwd-strength-bar" id="pwdBarFill"></div></div>
+        <span id="pwdHint" style="font-size:0.72rem;color:var(--text3);"></span>
+      </div>
+      <div class="f-group">
+        <label class="f-label" data-i18n="form_pass_confirm">Підтвердіть пароль</label>
+        <div class="inp-wrap">
+          <span class="inp-icon">🔒</span>
+          <input class="f-input" type="password" id="rPwd2" placeholder="Повторіть пароль">
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:0.6rem;font-size:0.8rem;color:var(--text3);">
+        <input type="checkbox" id="rTerms" style="margin-top:0.1rem;accent-color:var(--accent);">
+        <label for="rTerms" data-i18n="terms">Я погоджуюсь з умовами використання сервісу</label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doRegister()" data-i18n="btn_reg_do">Зареєструватись</button>
+      <div class="auth-divider">або</div>
+      <div id="googleRegBtn" class="google-btn-container"></div>
+      <p class="text-c" style="font-size:0.8rem;color:var(--text3);">
+        <span data-i18n="have_account">Вже є акаунт?</span>
+        <button class="auth-link" onclick="authTab('login')" data-i18n="do_login">Увійти</button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- CABINET MODAL -->
+<div class="modal-overlay" id="cabinetModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('cabinetModal')">✕</button>
+    <div class="m-title">👤 <span data-i18n="cab_title">Особистий кабінет</span></div>
+    <div class="cab-profile-bar">
+      <div class="cab-avatar">👮</div>
+      <div>
+        <div class="cab-username" id="cabName">—</div>
+        <div class="cab-email" id="cabEmail">—</div>
+      </div>
+      <div class="cab-badge">● <span data-i18n="cab_active">Активний</span></div>
+      <button class="btn btn-danger-o" onclick="doLogout()" style="font-size:0.75rem;padding:0.35rem 0.7rem;" data-i18n="btn_logout">Вийти</button>
+    </div>
+    <div class="cab-nav">
+      <button class="cab-tab active" onclick="cabTab('orders')" data-i18n="cab_orders">📦 Замовлення</button>
+      <button class="cab-tab" onclick="cabTab('downloads')" data-i18n="cab_downloads">⬇ Завантаження</button>
+      <button class="cab-tab" onclick="cabTab('settings')" data-i18n="cab_settings">⚙ Налаштування</button>
+    </div>
+
+    <!-- Orders -->
+    <div class="cab-section active" id="cab-orders">
+      <div id="orderList"><p class="text-c text-muted" style="padding:2rem;" data-i18n="no_orders">Замовлень поки немає</p></div>
+    </div>
+
+    <!-- Downloads -->
+    <div class="cab-section" id="cab-downloads">
+      <div id="downloadList"><p class="text-c text-muted" style="padding:2rem;" data-i18n="no_downloads">Немає доступних файлів</p></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="cab-section" id="cab-settings">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_username">Нікнейм</label>
+          <input class="f-input" type="text" id="sName">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Email</label>
+          <input class="f-input" type="email" id="sEmail">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Telegram</label>
+          <input class="f-input" type="text" id="sTg" placeholder="@username">
+        </div>
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_new_pass">Новий пароль (якщо потрібно)</label>
+          <input class="f-input" type="password" id="sNewPwd" placeholder="Залиште порожнім">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveSettings()" data-i18n="btn_save">💾 Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div class="modal-overlay" id="cartModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('cartModal')">✕</button>
+    <div class="m-title">🛒 <span data-i18n="cart_title">Кошик</span></div>
+    <div id="cartBody"></div>
+    <div id="cartEmpty" class="text-c text-muted" style="padding:2rem;" data-i18n="cart_empty">Кошик порожній 😔</div>
+    <div id="cartFoot" class="hidden">
+      <div class="promo-row">
+        <input type="text" id="promoInput" placeholder="Промокод" maxlength="20">
+        <button onclick="applyPromo()" data-i18n="btn_apply_promo">Застосувати</button>
+      </div>
+      <div id="promoOk" class="promo-ok hidden"></div>
+      <div id="promoErr" class="promo-err hidden"></div>
+      <div id="cartDiscountRow" class="cart-discount-row hidden"></div>
+      <div class="cart-total-row">
+        <span data-i18n="cart_total">Загальна сума:</span>
+        <span class="cart-total-price" id="cartTotal">0 грн</span>
+      </div>
+      <div class="flex-bc mt-2">
+        <button class="btn btn-danger-o" onclick="clearCart()" data-i18n="btn_clear">🗑 Очистити</button>
+        <button class="btn btn-gold" onclick="goCheckout()" data-i18n="btn_checkout">💳 Оформити замовлення</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal wide">
+    <button class="m-close" onclick="closeM('checkoutModal')">✕</button>
+    <div class="m-title" data-i18n="checkout_title">💳 Оформлення замовлення</div>
+    <div class="checkout-steps">
+      <div class="co-step active" id="cstep1">1. <span data-i18n="co_step1">Дані</span></div>
+      <div class="co-step" id="cstep2">2. <span data-i18n="co_step2">Оплата</span></div>
+      <div class="co-step" id="cstep3">3. <span data-i18n="co_step3">Підтвердження</span></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="co1">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <div class="f-group">
+          <label class="f-label" data-i18n="form_name">Ім'я</label>
+          <input class="f-input" id="coName" type="text" placeholder="Ваше ім'я">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Email</label>
+          <input class="f-input" id="coEmail" type="email" placeholder="email@gmail.com">
+        </div>
+        <div class="f-group" style="grid-column:1/-1;">
+          <label class="f-label">Telegram (для підтвердження)</label>
+          <input class="f-input" id="coTg" type="text" placeholder="@username">
+        </div>
+      </div>
+      <div class="flex-bc">
+        <span class="text-muted" style="font-size:0.82rem;"></span>
+        <button class="btn btn-primary" onclick="coStep(2)" data-i18n="btn_next">Далі →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="co2" class="hidden">
+      <p class="text-muted mb-2" style="font-size:0.88rem;" data-i18n="pay_choose">Оберіть метод оплати:</p>
+      <div class="pay-methods">
+        <button class="pay-card sel" id="pm1" onclick="selPay('pm1')">
+          <span class="pay-icon">🏦</span>
+          <div><div class="pay-label">Monobank</div><div class="pay-sub" data-i18n="pay_mono_sub">Переказ на картку UAH</div></div>
+        </button>
+        <button class="pay-card" id="pm2" onclick="selPay('pm2')">
+          <span class="pay-icon">🔸</span>
+          <div><div class="pay-label">USDT TRC-20</div><div class="pay-sub" data-i18n="pay_usdt_sub">Криптовалюта, без комісій</div></div>
+        </button>
+        <button class="pay-card" id="pm3" onclick="selPay('pm3')">
+          <span class="pay-icon">✈</span>
+          <div><div class="pay-label">Telegram</div><div class="pay-sub" data-i18n="pay_tg_sub">Узгодимо особисто</div></div>
+        </button>
+      </div>
+      <div id="monoInfo" style="display:block;">
+        <p class="text-muted mb-1" style="font-size:0.82rem;" data-i18n="pay_mono_desc">Переведіть кошти на картку Monobank:</p>
+        <div class="mono-card">
+          <div class="mono-logo">●●● MONOBANK</div>
+          <div class="mono-num" id="monoNum">5375 4141 4141 4141</div>
+          <div class="mono-owner">LSPDFR ELITE STUDIO</div>
+          <button class="mono-copy" onclick="copyCard()" data-i18n="btn_copy">Копіювати</button>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text3);line-height:1.6;" data-i18n="pay_mono_note">
+          ⚠ Після оплати надішліть скрін у Telegram або через форму нижче. Адмін підтвердить оплату і видасть товар.
+        </p>
+        <div class="f-group mt-2">
+          <label class="f-label" data-i18n="pay_comment">Коментар / Скрін оплати</label>
+          <input class="f-input" type="text" id="payComment" placeholder="Надіслав о 14:30, остання 4141">
+        </div>
+      </div>
+      <div class="confirm-sum">
+        <span class="font-raj" style="font-weight:700;" data-i18n="cart_total">Загальна сума:</span>
+        <span class="confirm-amount" id="coFinalTotal">0 грн</span>
+      </div>
+      <div class="flex-bc mt-2">
+        <button class="btn btn-glass" onclick="coStep(1)">← <span data-i18n="btn_back">Назад</span></button>
+        <button class="btn btn-gold" onclick="confirmOrder()" data-i18n="btn_confirm">✅ Підтвердити замовлення</button>
+      </div>
+    </div>
+
+    <!-- Step 3 success -->
+    <div id="co3" class="hidden">
+      <div class="success-wrap">
+        <div class="success-icon">🎉</div>
+        <h3 class="font-orb" style="font-size:1.1rem;margin:1rem 0 0.5rem;color:var(--text);" data-i18n="order_success">Замовлення прийнято!</h3>
+        <p style="color:var(--text2);font-size:0.88rem;line-height:1.7;" data-i18n="order_success_desc">
+          Дякуємо! Ваше замовлення зареєстровано.<br>
+          Після підтвердження оплати адміністратор видасть файл у вашому кабінеті.<br>
+          <strong style="color:var(--accent2);">Зазвичай це займає до 30 хвилин.</strong>
+        </p>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:1rem;margin:1.2rem 0;font-size:0.85rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+            <span class="text-muted" data-i18n="order_num">№ замовлення:</span>
+            <span class="font-raj" style="color:var(--accent2);" id="orderNum">#0000</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span class="text-muted" data-i18n="order_status_label">Статус:</span>
+            <span class="order-status s-pend" data-i18n="status_await">Очікує підтвердження</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="closeM('checkoutModal');clearCart();" data-i18n="btn_back_shop">← Повернутись до магазину</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal xwide">
+    <button class="m-close" onclick="closeM('adminModal')">✕</button>
+    <div class="m-title">⚙ Адміністративна панель</div>
+
+    <div id="adminLoginBlock">
+      <p class="text-muted mb-2" style="font-size:0.88rem;">Введіть пароль адміна:</p>
+      <div class="f-group">
+        <div class="inp-wrap">
+          <span class="inp-icon">🔑</span>
+          <input class="f-input" type="password" id="adminPwd" placeholder="Пароль адміна" onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="adminLogin()">Увійти в панель</button>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="admin-wrap">
+        <div class="admin-sidebar">
+          <button class="admin-nav-btn active" onclick="adminSec('orders')">📦 Замовлення</button>
+          <button class="admin-nav-btn" onclick="adminSec('users')">👥 Користувачі</button>
+          <button class="admin-nav-btn" onclick="adminSec('issue')">🎁 Видати товар</button>
+          <button class="admin-nav-btn" onclick="adminSec('stats')">📊 Статистика</button>
+        </div>
+        <div class="admin-main">
+
+          <!-- Orders -->
+          <div class="admin-section active" id="asec-orders">
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text);">Всі замовлення</h3>
+            <table class="admin-table" id="adminOrdersTable">
+              <thead>
+                <tr>
+                  <th>№</th><th>Користувач</th><th>Товар</th><th>Сума</th><th>Статус</th><th>Дія</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Users -->
+          <div class="admin-section" id="asec-users">
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text);">Зареєстровані користувачі</h3>
+            <table class="admin-table">
+              <thead><tr><th>Нік</th><th>Email</th><th>Замовлень</th><th>Дата реєстр.</th></tr></thead>
+              <tbody id="adminUsersTbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Issue product -->
+          <div class="admin-section" id="asec-issue">
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text);">🎁 Видати товар покупцю</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div class="f-group">
+                <label class="f-label">Email користувача</label>
+                <input class="f-input" type="email" id="issueUser" placeholder="user@email.com">
+              </div>
+              <div class="f-group">
+                <label class="f-label">№ замовлення</label>
+                <input class="f-input" type="text" id="issueOrderNum" placeholder="#1234">
+              </div>
+              <div class="f-group" style="grid-column:1/-1;">
+                <label class="f-label">Файл / Посилання на завантаження</label>
+                <input class="f-input" type="text" id="issueFile" placeholder="https://drive.google.com/...">
+              </div>
+              <div class="f-group" style="grid-column:1/-1;">
+                <label class="f-label">Примітка для покупця</label>
+                <input class="f-input" type="text" id="issueNote" placeholder="Встановлення: скопіювати в папку mods/...">
+              </div>
+            </div>
+            <button class="btn btn-success" onclick="issueProduct()">✅ Видати товар та підтвердити оплату</button>
+          </div>
+
+          <!-- Stats -->
+          <div class="admin-section" id="asec-stats">
+            <h3 class="font-raj" style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;color:var(--text);">📊 Статистика</h3>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:1.2rem;text-align:center;">
+                <div class="font-orb" style="font-size:1.8rem;color:var(--accent2);" id="statOrders">0</div>
+                <div class="text-muted" style="font-size:0.75rem;">Замовлень</div>
+              </div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:1.2rem;text-align:center;">
+                <div class="font-orb" style="font-size:1.8rem;color:var(--gold);" id="statRevenue">0 грн</div>
+                <div class="text-muted" style="font-size:0.75rem;">Виручка</div>
+              </div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:1.2rem;text-align:center;">
+                <div class="font-orb" style="font-size:1.8rem;color:var(--success);" id="statUsers">0</div>
+                <div class="text-muted" style="font-size:0.75rem;">Користувачів</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMISSION MODAL (для вибраної моделі) -->
+<div class="modal-overlay" id="commModal">
+  <div class="modal">
+    <button class="m-close" onclick="closeM('commModal')">✕</button>
+    <div class="m-title">🎨 Замовити кастомну версію</div>
+    <p class="text-muted mb-2" style="font-size:0.88rem;">Заповніть форму і ми зв'яжемось з вами протягом 24 годин.</p>
+    <div class="auth-body active" style="flex-direction:column;gap:0.9rem;">
+      <div class="f-group">
+        <label class="f-label">Ваш Telegram / Discord</label>
+        <input class="f-input" type="text" id="qContact" placeholder="@username">
+      </div>
+      <div class="f-group">
+        <label class="f-label">Деталі</label>
+        <textarea class="f-textarea" id="qDetails" placeholder="Що саме потрібно зробити..."></textarea>
+      </div>
+      <button class="btn btn-gold" onclick="submitQuick()">📨 Надіслати запит</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================================
+// i18n TRANSLATIONS
+// ===================================
+const i18n = {
+  uk: {
+    nav_catalog:'Каталог', nav_models:'Моделі / EUP', nav_about:'Про нас', nav_contact:'Контакт',
+    btn_login:'Увійти', btn_cabinet:'Кабінет',
+    hero_badge:'Ukraine Police Mods for GTA 5 • LSPDFR',
+    hero_tagline:'Преміальні моделі поліції України для GTA 5. Реалізм, деталізація, якість.',
+    hero_subtag:'Офіційний магазин • Швидка доставка • Підтримка 24/7',
+    btn_catalog:'Переглянути каталог', btn_models:'Моделі & EUP', btn_about:'Про нас',
+    stat_mods:'Модів', stat_clients:'Клієнтів', stat_rating:'Рейтинг',
+    sec_shop:'Магазин', sec_catalog:'Каталог модів',
+    cat_all:'Всі', cat_car:'Автомобілі', cat_skin:'Скіни', cat_pack:'Паки', cat_weapon:'Зброя',
+    sec_commission:'Комісійні замовлення', sec_models:'Моделі & EUP Форми',
+    models_desc:'Замовте кастомну 3D модель або EUP форму для вашого підрозділу. Реалістична деталізація, строки 3–10 днів.',
+    form_name:'Ваше ім\'я / нік', form_contact:'Telegram / Discord', form_type:'Тип замовлення',
+    form_choose:'Оберіть...', opt_car:'3D Модель авто', opt_eup:'EUP Форма',
+    opt_texture:'Текстури / Скін', opt_other:'Інше',
+    form_budget:'Бюджет (грн)', form_details:'Деталі замовлення',
+    sec_about:'Хто ми', about_studio:'LSPDFR ELITE STUDIO', about_tagline:'Офіційний магазин преміум контенту',
+    about_mods:'модів', about_rating:'рейтинг', about_clients:'клієнтів',
+    about_title:'Про нас',
+    about_p1:'LSPDFR ELITE STUDIO — команда професійних 3D моделерів та скінерів, що спеціалізується на реалістичних модах поліції України для GTA 5.',
+    about_p2:'Кожна модель створена на основі реальних фотографій, офіційної документації та консультацій з правоохоронцями.',
+    feat1_t:'Максимальна деталізація', feat1_d:'Реалістична геометрія та 4K текстури',
+    feat2_t:'Швидка доставка', feat2_d:'Файли доступні одразу після підтвердження',
+    feat3_t:'Оновлення безплатно', feat3_d:'Підтримка нових версій GTA 5 та LSPDFR',
+    feat4_t:'Широка сумісність', feat4_d:'LSPDFR, FiveM (ESX/QBCore), Singleplayer',
+    sec_faq:'Часті запитання', sec_contact:'Зв\'язок',
+    contact_title:'Контакти', contact_reach:'Зв\'яжіться з нами',
+    contact_desc:'Питання про моди, замовлення, або хочете замовити щось унікальне? Ми завжди на зв\'язку!',
+    contact_form:'Написати напряму',
+    form_contact_label:'Email або Telegram', form_msg:'Повідомлення',
+    btn_send_msg:'Надіслати', footer_desc:'Преміальні моди поліції України для GTA 5',
+    auth_title:'Авторизація', tab_login:'Увійти', tab_reg:'Реєстрація',
+    form_email:'Email', form_pass:'Пароль', btn_login_do:'Увійти',
+    no_account:'Немає акаунту?', do_reg:'Зареєструватись',
+    form_username:'Нікнейм', form_pass_confirm:'Підтвердіть пароль',
+    terms:'Я погоджуюсь з умовами використання сервісу',
+    btn_reg_do:'Зареєструватись', have_account:'Вже є акаунт?', do_login:'Увійти',
+    cab_title:'Особистий кабінет', cab_active:'Активний',
+    btn_logout:'Вийти', cab_orders:'📦 Замовлення', cab_downloads:'⬇ Завантаження',
+    cab_settings:'⚙ Налаштування', no_orders:'Замовлень поки немає', no_downloads:'Немає доступних файлів',
+    form_new_pass:'Новий пароль (якщо потрібно)', btn_save:'💾 Зберегти',
+    cart_title:'Кошик', cart_empty:'Кошик порожній 😔', cart_total:'Загальна сума:',
+    btn_clear:'🗑 Очистити', btn_checkout:'💳 Оформити замовлення', btn_apply_promo:'Застосувати',
+    checkout_title:'💳 Оформлення замовлення',
+    co_step1:'Дані', co_step2:'Оплата', co_step3:'Підтвердження',
+    pay_choose:'Оберіть метод оплати:',
+    pay_mono_sub:'Переказ на картку UAH', pay_usdt_sub:'Криптовалюта, без комісій', pay_tg_sub:'Узгодимо особисто',
+    pay_mono_desc:'Переведіть кошти на картку Monobank:',
+    btn_copy:'Копіювати',
+    pay_mono_note:'⚠ Після оплати надішліть скрін у Telegram або через форму нижче. Адмін підтвердить оплату і видасть товар.',
+    pay_comment:'Коментар / Скрін оплати',
+    btn_next:'Далі →', btn_back:'Назад', btn_confirm:'✅ Підтвердити замовлення',
+    order_success:'Замовлення прийнято!',
+    order_success_desc:'Дякуємо! Ваше замовлення зареєстровано.<br>Після підтвердження оплати адміністратор видасть файл у вашому кабінеті.<br><strong style="color:var(--accent2);">Зазвичай це займає до 30 хвилин.</strong>',
+    order_num:'№ замовлення:', order_status_label:'Статус:', status_await:'Очікує підтвердження',
+    btn_back_shop:'← Повернутись до магазину',
+    form_commission_title:'📋 Заявка на кастомне замовлення',
+    btn_send:'Надіслати заявку',
+    status_ok:'Система працює нормально', status_err:'Виникла помилка системи',
+    cartText:'Кошик',
+  },
+  en: {
+    nav_catalog:'Catalog', nav_models:'Models / EUP', nav_about:'About', nav_contact:'Contact',
+    btn_login:'Login', btn_cabinet:'Cabinet',
+    hero_badge:'Ukraine Police Mods for GTA 5 • LSPDFR',
+    hero_tagline:'Premium Ukraine police models for GTA 5. Realism, detail, quality.',
+    hero_subtag:'Official Store • Fast Delivery • 24/7 Support',
+    btn_catalog:'Browse Catalog', btn_models:'Models & EUP', btn_about:'About Us',
+    stat_mods:'Mods', stat_clients:'Clients', stat_rating:'Rating',
+    sec_shop:'Shop', sec_catalog:'Mod Catalog',
+    cat_all:'All', cat_car:'Vehicles', cat_skin:'Skins', cat_pack:'Packs', cat_weapon:'Weapons',
+    sec_commission:'Commissions', sec_models:'Models & EUP Forms',
+    models_desc:'Order a custom 3D model or EUP uniform for your unit. Realistic detail, 3–10 day turnaround.',
+    form_name:'Your name / nick', form_contact:'Telegram / Discord', form_type:'Order type',
+    form_choose:'Choose...', opt_car:'3D Vehicle model', opt_eup:'EUP Uniform',
+    opt_texture:'Textures / Skin', opt_other:'Other',
+    form_budget:'Budget (UAH)', form_details:'Order details',
+    sec_about:'Who we are', about_studio:'LSPDFR ELITE STUDIO', about_tagline:'Official premium content store',
+    about_mods:'mods', about_rating:'rating', about_clients:'clients',
+    about_title:'About Us',
+    about_p1:'LSPDFR ELITE STUDIO — a team of professional 3D modelers specializing in realistic Ukraine police mods for GTA 5.',
+    about_p2:'Every model is based on real photos, official documentation, and consultations with law enforcement.',
+    feat1_t:'Maximum Detail', feat1_d:'Realistic geometry and 4K textures',
+    feat2_t:'Fast Delivery', feat2_d:'Files available right after confirmation',
+    feat3_t:'Free Updates', feat3_d:'Support for new GTA 5 and LSPDFR versions',
+    feat4_t:'Wide Compatibility', feat4_d:'LSPDFR, FiveM (ESX/QBCore), Singleplayer',
+    sec_faq:'FAQ', sec_contact:'Contact',
+    contact_title:'Contacts', contact_reach:'Reach us',
+    contact_desc:'Questions about mods, orders, or want something unique? We\'re always here!',
+    contact_form:'Write directly',
+    form_contact_label:'Email or Telegram', form_msg:'Message',
+    btn_send_msg:'Send', footer_desc:'Premium Ukraine police mods for GTA 5',
+    auth_title:'Authorization', tab_login:'Login', tab_reg:'Register',
+    form_email:'Email', form_pass:'Password', btn_login_do:'Login',
+    no_account:'No account?', do_reg:'Register',
+    form_username:'Username', form_pass_confirm:'Confirm password',
+    terms:'I agree to the terms of service',
+    btn_reg_do:'Register', have_account:'Already have an account?', do_login:'Login',
+    cab_title:'Personal Cabinet', cab_active:'Active',
+    btn_logout:'Logout', cab_orders:'📦 Orders', cab_downloads:'⬇ Downloads',
+    cab_settings:'⚙ Settings', no_orders:'No orders yet', no_downloads:'No files available',
+    form_new_pass:'New password (if needed)', btn_save:'💾 Save',
+    cart_title:'Cart', cart_empty:'Cart is empty 😔', cart_total:'Total:',
+    btn_clear:'🗑 Clear', btn_checkout:'💳 Checkout', btn_apply_promo:'Apply',
+    checkout_title:'💳 Checkout',
+    co_step1:'Details', co_step2:'Payment', co_step3:'Confirm',
+    pay_choose:'Choose payment method:',
+    pay_mono_sub:'Transfer to UAH card', pay_usdt_sub:'Crypto, no fees', pay_tg_sub:'We\'ll arrange personally',
+    pay_mono_desc:'Transfer funds to the Monobank card:',
+    btn_copy:'Copy',
+    pay_mono_note:'⚠ After payment, send a screenshot via Telegram or the form below. Admin will confirm and issue the product.',
+    pay_comment:'Comment / Payment screenshot',
+    btn_next:'Next →', btn_back:'Back', btn_confirm:'✅ Confirm Order',
+    order_success:'Order received!',
+    order_success_desc:'Thank you! Your order is registered.<br>After payment confirmation the admin will issue the file in your cabinet.<br><strong style="color:var(--accent2);">Usually within 30 minutes.</strong>',
+    order_num:'Order #:', order_status_label:'Status:', status_await:'Awaiting confirmation',
+    btn_back_shop:'← Back to shop',
+    form_commission_title:'📋 Custom Commission Request',
+    btn_send:'Send Request',
+    status_ok:'System running normally', status_err:'System error occurred',
+    cartText:'Cart',
+  }
+};
+let lang = 'uk';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(l === 'uk' ? 'укр' : 'eng')));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (i18n[l][key]) el.innerHTML = i18n[l][key];
+  });
+}
+
+// ===================================
+// THEME
+// ===================================
+let theme = 'dark';
+function toggleTheme() {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeKnob').textContent = theme === 'dark' ? '🌙' : '☀';
+}
+
+// ===================================
+// PARTICLES
+// ===================================
+(function spawnParticles() {
+  const wrap = document.getElementById('particles-wrap');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const x = Math.random() * 100;
+    const dur = 8 + Math.random() * 12;
+    const delay = -Math.random() * dur;
+    const drift = (Math.random() - 0.5) * 200 + 'px';
+    p.style.cssText = `left:${x}%;--drift:${drift};animation-duration:${dur}s;animation-delay:${delay}s;`;
+    if (Math.random() > 0.7) { p.style.background = 'var(--gold)'; p.style.width = '3px'; p.style.height = '3px'; }
+    wrap.appendChild(p);
+  }
+})();
+
+// ===================================
+// STATUS PILL
+// ===================================
+function showStatus(ok, msgKey) {
+  const pill = document.getElementById('statusPill');
+  pill.className = 'show ' + (ok ? 'status-ok' : 'status-err');
+  pill.innerHTML = `<div class="status-dot"></div> ${i18n[lang][msgKey] || (ok ? 'OK' : 'ERROR')}`;
+  setTimeout(() => pill.style.opacity = '0', 4000);
+  setTimeout(() => { pill.style.opacity = ''; pill.className = ''; }, 5000);
+}
+
+// ===================================
+// FLOATING CTA
+// ===================================
+let floatOpen = false;
+function toggleFloat() {
+  floatOpen = !floatOpen;
+  document.getElementById('floatLinks').classList.toggle('open', floatOpen);
+}
+
+// Графік підтримки: 10:00–22:00. Поза часом — показуємо push про графік
+function isSupportHours() {
+  const h = new Date().getHours();
+  return h >= 10 && h < 22;
+}
+function handleSupportClick() {
+  if (isSupportHours()) {
+    window.open('https://t.me/lspdfrelitestudio', '_blank');
+  } else {
+    document.getElementById('supportScheduleNotif').classList.add('show');
+  }
+}
+function closeSupportSchedule() {
+  document.getElementById('supportScheduleNotif').classList.remove('show');
+}
+
+// Залишаємо toggleFloat для float links (якщо потрібно відкривати dropdown)
+
+// ===================================
+// SCROLL ANIMATIONS
+// ===================================
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ===================================
+// DATA
+// ===================================
+const products = [
+  { id:1, name:'Toyota Camry — Поліція Київ', cat:'car', price:149, badge:'hot', desc:'Toyota Camry у комплектації патрульної поліції Київ. 4K текстури, HiPoly геометрія.', icon:'🚔', bg:'linear-gradient(135deg,#0d1a3a,#0a2050)' },
+  { id:2, name:'Renault Dokker — Поліція Львів', cat:'car', price:129, badge:'new', desc:'Renault Dokker позашляховик Львова. Реальне маркування та мигалки.', icon:'🚗', bg:'linear-gradient(135deg,#1a0d1a,#250a3a)' },
+  { id:3, name:'ВАЗ-2110 — Поліція Одеса', cat:'car', price:89, badge:'sale', oldPrice:120, desc:'Класична ВАЗ-2110 у вінтажному розфарбуванні 90-х. Ностальгія.', icon:'🚙', bg:'linear-gradient(135deg,#0d1a0d,#0a2510)' },
+  { id:4, name:'BMW 520 — Кіберполіція', cat:'car', price:189, badge:'new', desc:'BMW 520d чорний у забарвленні кіберполіції. Преміум деталізація, 4K.', icon:'🚓', bg:'linear-gradient(135deg,#0a0a0a,#1a1a1a)' },
+  { id:5, name:'Volkswagen Tiguan — ДПС', cat:'car', price:169, desc:'Volkswagen Tiguan ДПС з повним оснащенням. Мигалки, рація, логотипи.', icon:'🚕', bg:'linear-gradient(135deg,#1a1a0d,#25200a)' },
+  { id:6, name:'СКІН: Патрульний офіцер 2024', cat:'skin', price:59, badge:'new', desc:'Реалістичний скін у новій формі НПУ 2024 року. 4 варіанти.', icon:'👮', bg:'linear-gradient(135deg,#0a1a1a,#0a2525)' },
+  { id:7, name:'СКІН: Командир підрозділу', cat:'skin', price:79, desc:'Скін старшого офіцера в парадній + повсякденній формі.', icon:'👮‍♂️', bg:'linear-gradient(135deg,#1a0d0a,#2a1510)' },
+  { id:8, name:'ПАКЕТ: Патрульна служба', cat:'pack', price:299, badge:'hot', oldPrice:420, desc:'3 авто + 4 скіни + бонусні звуки сирен. Найпопулярніший пакет!', icon:'📦', bg:'linear-gradient(135deg,#0a0d1a,#10152a)' },
+  { id:9, name:'ПАКЕТ: КОРД Спецпідрозділ', cat:'pack', price:249, desc:'Пакет КОРД: авто, скіни, зброя та спецзнаряддя для рольових ігор.', icon:'🎖', bg:'linear-gradient(135deg,#0d0a0a,#1e1010)' },
+  { id:10, name:'АК-74 — Поліція UA', cat:'weapon', price:69, badge:'new', desc:'АК-74 з поліцейськими маркуваннями та ложе. HiPoly модель.', icon:'🔫', bg:'linear-gradient(135deg,#1a0d0d,#2a1515)' },
+  { id:11, name:'ПМ — Пістолет Макарова', cat:'weapon', price:49, desc:'ПМ з реальними текстурами, анімацією та затворною рамою.', icon:'🔫', bg:'linear-gradient(135deg,#0d0d1a,#151525)' },
+  { id:12, name:'ПАКЕТ: Вся колекція 2024', cat:'pack', price:599, badge:'hot', oldPrice:890, desc:'Повна колекція: всі авто, скіни та зброя 2024 каталогу.', icon:'👑', bg:'linear-gradient(135deg,#1a1400,#2a2200)' },
+];
+
+const models = [
+  { id:'m1', name:'Custom 3D Модель авто', type:'3D Model', price:'від 350 грн', desc:'Повністю кастомна 3D модель авто за вашим вибором. LOD, колізії, анімовані частини.', specs:['LOD x4','Collision','Animated'], icon:'🚔', bg:'linear-gradient(135deg,#0a0e25,#0d1535)' },
+  { id:'m2', name:'EUP Форма підрозділу', type:'EUP Uniform', price:'від 200 грн', desc:'Кастомна EUP форма для вашого LSPDFR або FiveM підрозділу. Нашивки, логотипи.', specs:['EUP','FiveM','4K Textures'], icon:'👮', bg:'linear-gradient(135deg,#0a1a0a,#0d2510)' },
+  { id:'m3', name:'Скін / Лівера на авто', type:'Texture Pack', price:'від 120 грн', desc:'Кастомна лівера та розфарбування на ваше авто. Будь-яке підрозділення чи місто.', specs:['4K','Any Vehicle','Quick'], icon:'🎨', bg:'linear-gradient(135deg,#1a0a0a,#2a1010)' },
+  { id:'m4', name:'Повний пакет підрозділу', type:'Full Pack', price:'від 800 грн', desc:'Авто + форма + лівера + логотипи + бонуси для вашого підрозділу. All-in-one рішення.', specs:['Full Pack','Priority','Support'], icon:'📦', bg:'linear-gradient(135deg,#0a0a0a,#151515)' },
+  { id:'m5', name:'Озброєння (зброя + скін)', type:'Weapon Pack', price:'від 150 грн', desc:'Кастомна зброя для вашого підрозділу: пістолети, автомати, снайперські гвинтівки.', specs:['Weapons','Animations','4K'], icon:'🔫', bg:'linear-gradient(135deg,#1a0d00,#2a1e00)' },
+  { id:'m6', name:'ANPR / MDT скрін текстури', type:'UI Pack', price:'від 80 грн', desc:'Кастомні текстури для ANPR-камер, MDT та інших UI елементів LSPDFR.', specs:['LSPDFR','MDT','ANPR'], icon:'💻', bg:'linear-gradient(135deg,#000a1a,#001025)' },
+];
+
+const faqs = [
+  { q:'Як я отримаю файли після покупки?', a:'Файли з\'являться у вашому особистому кабінеті після підтвердження оплати адміністратором. Також надсилаємо посилання на email.' },
+  { q:'Чи сумісні моди з LSPDFR і FiveM?', a:'Так! Всі моди сумісні з LSPDFR, FiveM (ESX/QBCore) та стандартним режимом GTA 5. Сумісність вказана в описі кожного мода.' },
+  { q:'Як встановити мод?', a:'До кожної покупки додається детальна інструкція. Також ви можете звернутись до нашої підтримки в Telegram — допоможемо безкоштовно.' },
+  { q:'Чи можна замовити кастомний мод?', a:'Так! Переходьте до розділу "Моделі & EUP", натискайте "Замовити кастом" і заповнюйте форму. Ми зв\'яжемось протягом 24 годин.' },
+  { q:'Яка гарантія на моди?', a:'Гарантуємо, що кожен мод працює як описано. Якщо є технічна проблема — вирішимо безкоштовно. Оновлення для нових версій GTA безкоштовні.' },
+  { q:'Яка валюта оплати?', a:'Приймаємо UAH (гривня) через Monobank/ПриватБанк, а також USDT TRC-20 без комісій. Telegram — для індивідуальних домовленостей.' },
+  { q:'Скільки часу займає видача файлів?', a:'Зазвичай до 30 хвилин після підтвердження оплати. У нічний час може займати до кількох годин. Якщо затримка — пишіть у Telegram.' },
+];
+
+// ===================================
+// RENDER PRODUCTS
+// ===================================
+function renderProducts(cat = 'all') {
+  const grid = document.getElementById('productsGrid');
+  const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+  const catNames = { car:'Автомобіль', skin:'Скін', pack:'Пакет', weapon:'Зброя' };
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="product-card" style="animation-delay:${i*0.05}s">
+      <div class="prod-thumb" style="background:${p.bg}">
+        <span style="position:relative;z-index:1">${p.icon}</span>
+        ${p.badge ? `<span class="prod-badge b-${p.badge}">${p.badge==='hot'?'Хіт':p.badge==='new'?'New':'Sale'}</span>` : ''}
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">${catNames[p.cat]||''}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-footer">
+          <div class="prod-price">
+            ${p.oldPrice ? `<span class="old-p">${p.oldPrice} грн</span>` : ''}
+            ${p.price} грн
+          </div>
+          <button class="add-btn" onclick="addCart(${p.id}, this)">+ Кошик</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================================
+// RENDER MODELS
+// ===================================
+function renderModels() {
+  const grid = document.getElementById('modelsGrid');
+  grid.innerHTML = models.map(m => `
+    <div class="model-card">
+      <div class="model-thumb" style="background:${m.bg}">
+        <span style="position:relative;z-index:1;filter:drop-shadow(0 0 20px rgba(240,180,41,0.4))">${m.icon}</span>
+        <span class="model-tag">${m.type}</span>
+      </div>
+      <div class="model-body">
+        <div class="model-name">${m.name}</div>
+        <div class="model-desc">${m.desc}</div>
+        <div class="model-specs">
+          ${m.specs.map(s => `<span class="spec-tag">${s}</span>`).join('')}
+        </div>
+        <div class="model-footer">
+          <div class="model-price">${m.price}</div>
+          <button class="commission-btn" onclick="openCommission('${m.id}','${m.name}')">Замовити</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================================
+// RENDER FAQ
+// ===================================
+function renderFAQ() {
+  document.getElementById('faqList').innerHTML = faqs.map((f,i) => `
+    <div class="faq-item" id="faq${i}" onclick="toggleFAQ(${i})">
+      <div class="faq-q">${f.q} <span class="faq-ic">+</span></div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+function toggleFAQ(i) {
+  document.getElementById('faq'+i).classList.toggle('open');
+}
+
+// ===================================
+// FILTERS
+// ===================================
+document.querySelectorAll('.f-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts(btn.dataset.cat);
+  });
+});
+
+// ===================================
+// CART
+// ===================================
+let cart = [];
+let activePromo = null;
+const PROMO_CODES = { 'ELITE10':10, 'WELCOME5':5, 'HOT15':15, 'NEW20':20 };
+
+function addCart(id, btnEl) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else cart.push({...p, qty:1});
+
+  // Fly-to-cart animation
+  if (btnEl) {
+    const rect = btnEl.closest('.product-card')?.querySelector('.prod-thumb')?.getBoundingClientRect()
+      || btnEl.getBoundingClientRect();
+    const cartRect = document.getElementById('cartBtn')?.getBoundingClientRect();
+    if (cartRect) {
+      const fly = document.createElement('div');
+      fly.className = 'fly-to-cart-item';
+      fly.textContent = p.icon;
+      fly.style.left = (rect.left + rect.width/2 - 21) + 'px';
+      fly.style.top = (rect.top + rect.height/2 - 21) + 'px';
+      const tx = (cartRect.left + cartRect.width/2) - (rect.left + rect.width/2);
+      const ty = (cartRect.top + cartRect.height/2) - (rect.top + rect.height/2);
+      fly.style.setProperty('--fly-x', tx + 'px');
+      fly.style.setProperty('--fly-y', ty + 'px');
+      document.body.appendChild(fly);
+      setTimeout(() => fly.remove(), 700);
+    }
+  }
+
+  updateCart();
+  notify('✅', `«${p.name}» — додано до кошика!`);
+}
+
+function updateCart() {
+  const cnt = cart.reduce((a, x) => a + x.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  if (badge) {
+    badge.textContent = cnt;
+    badge.style.display = cnt > 0 ? 'flex' : 'none';
+    if (cnt > 0) { badge.classList.add('pulse'); setTimeout(() => badge.classList.remove('pulse'), 400); }
+  }
+  renderCart();
+}
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const empty = document.getElementById('cartEmpty');
+  const foot = document.getElementById('cartFoot');
+  if (!cart.length) { if(body) body.innerHTML=''; if(empty) empty.classList.remove('hidden'); if(foot) foot.classList.add('hidden'); return; }
+  if(empty) empty.classList.add('hidden');
+  if(foot) foot.classList.remove('hidden');
+
+  if (body) body.innerHTML = cart.map(p => `
+    <div class="cart-item">
+      <div class="ci-icon">${p.icon}</div>
+      <div style="flex:1">
+        <div class="ci-name">${p.name}</div>
+        <div class="ci-price">${p.price} грн × <span class="qty-val">${p.qty}</span></div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="cartQty(${p.id}, -1)">−</button>
+          <span class="qty-val">${p.qty}</span>
+          <button class="qty-btn" onclick="cartQty(${p.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="ci-del" onclick="removeCart(${p.id})" title="Видалити">✕</button>
+    </div>
+  `).join('');
+
+  let total = cart.reduce((a, x) => a + x.price * x.qty, 0);
+  const discountRow = document.getElementById('cartDiscountRow');
+  if (activePromo !== null && discountRow) {
+    const discount = total * (activePromo / 100);
+    total -= discount;
+    discountRow.classList.remove('hidden');
+    discountRow.innerHTML = `<span>Промокод −${activePromo}%</span><span>−${Math.round(discount)} грн</span>`;
+  } else if (discountRow) discountRow.classList.add('hidden');
+
+  const cartTotal = document.getElementById('cartTotal');
+  const coFinal = document.getElementById('coFinalTotal');
+  if (cartTotal) cartTotal.textContent = Math.round(total) + ' грн';
+  if (coFinal) coFinal.textContent = Math.round(total) + ' грн';
+}
+
+function cartQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
+  updateCart();
+}
+
+function applyPromo() {
+  const code = (document.getElementById('promoInput')?.value || '').trim().toUpperCase();
+  const okEl = document.getElementById('promoOk');
+  const errEl = document.getElementById('promoErr');
+  if (!code) {
+    activePromo = null;
+    if (okEl) { okEl.classList.add('hidden'); okEl.textContent = ''; }
+    if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+    renderCart(); return;
+  }
+  if (PROMO_CODES[code] !== undefined) {
+    activePromo = PROMO_CODES[code];
+    if (okEl) { okEl.textContent = '✓ Промокод ' + code + ' застосовано (−' + activePromo + '%)'; okEl.classList.remove('hidden'); }
+    if (errEl) errEl.classList.add('hidden');
+    notify('✅', 'Промокод застосовано!');
+  } else {
+    activePromo = null;
+    if (errEl) { errEl.textContent = 'Невірний промокод'; errEl.classList.remove('hidden'); }
+    if (okEl) okEl.classList.add('hidden');
+    notify('⚠', 'Невірний промокод', true);
+  }
+  renderCart();
+}
+
+function removeCart(id) { cart = cart.filter(x => x.id !== id); updateCart(); }
+function clearCart() {
+  cart = [];
+  activePromo = null;
+  const promoInp = document.getElementById('promoInput');
+  if (promoInp) promoInp.value = '';
+  document.getElementById('promoOk')?.classList.add('hidden');
+  document.getElementById('promoErr')?.classList.add('hidden');
+  updateCart();
+}
+
+// ===================================
+// CHECKOUT
+// ===================================
+function goCheckout() {
+  if (!currentUser) {
+    closeM('cartModal');
+    openM('authModal');
+    notify('⚠', 'Увійдіть в акаунт для оформлення замовлення', true);
+    return;
+  }
+  document.getElementById('coName').value = currentUser.name || '';
+  document.getElementById('coEmail').value = currentUser.email || '';
+  coStep(1);
+  closeM('cartModal');
+  openM('checkoutModal');
+}
+
+let coCurrentStep = 1;
+function coStep(n) {
+  coCurrentStep = n;
+  [1,2,3].forEach(i => {
+    document.getElementById('co'+i).classList.toggle('hidden', i!==n);
+    const s = document.getElementById('cstep'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
+  });
+}
+
+let selPayMethod = 'pm1';
+function selPay(id) {
+  selPayMethod = id;
+  document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById(id).classList.add('sel');
+  document.getElementById('monoInfo').style.display = id === 'pm1' ? 'block' : 'none';
+}
+
+function copyCard() {
+  navigator.clipboard.writeText('5375 4141 4141 4141').then(() => notify('📋', 'Номер картки скопійовано!'));
+}
+
+let orderCounter = 1000;
+function confirmOrder() {
+  const name = document.getElementById('coName').value.trim();
+  const email = document.getElementById('coEmail').value.trim();
+  if (!name || !email) { notify('⚠','Заповніть ім\'я та email', true); return; }
+  orderCounter++;
+  document.getElementById('orderNum').textContent = '#' + orderCounter;
+  // Save order to user
+  if (currentUser) {
+    if (!currentUser.orders) currentUser.orders = [];
+    const items = cart.map(c => c.name).join(', ');
+    let total = cart.reduce((a,x) => a + x.price * x.qty, 0);
+    if (activePromo !== null) total = total * (1 - activePromo / 100);
+    currentUser.orders.push({
+      num: orderCounter, name: items, price: total,
+      date: new Date().toLocaleDateString('uk-UA'),
+      status: 'pending', products: [...cart], file: null
+    });
+    users[email] = { ...currentUser };
+    renderCabOrders();
+  }
+  let orderTotal = cart.reduce((a,x) => a + x.price*x.qty, 0);
+  if (activePromo !== null) orderTotal = Math.round(orderTotal * (1 - activePromo/100));
+  else orderTotal = Math.round(orderTotal);
+  // Push to admin orders
+  allOrders.push({
+    num: orderCounter,
+    user: currentUser ? currentUser.name : 'Гість',
+    email: currentUser ? currentUser.email : email,
+    product: cart.map(c=>c.name).join(', '),
+    price: orderTotal + ' грн',
+    status: 'pending'
+  });
+  coStep(3);
+}
+
+// ===================================
+// GOOGLE AUTH
+// ===================================
+const GOOGLE_CLIENT_ID = '637144604768-b3rfbbg673ahe3ii0mjuhofn0e7qi7jm.apps.googleusercontent.com';
+
+function initGoogleAuth() {
+  if (typeof google === 'undefined' || !google.accounts?.id || !GOOGLE_CLIENT_ID) {
+    setTimeout(initGoogleAuth, 150); // Чекаємо завантаження скрипта Google
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false
+  });
+  const btnOpts = { type: 'standard', theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular', width: 280 };
+  const loginEl = document.getElementById('googleLoginBtn');
+  const regEl = document.getElementById('googleRegBtn');
+  if (loginEl) google.accounts.id.renderButton(loginEl, btnOpts);
+  if (regEl) google.accounts.id.renderButton(regEl, { ...btnOpts, text: 'signup_with' });
+}
+
+function handleGoogleCredential(response) {
+  try {
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email || '';
+    const name = payload.name || payload.given_name || email.split('@')[0];
+    if (!users[email]) users[email] = { name, email, pwd: '[google]', orders: [], regDate: new Date().toLocaleDateString('uk-UA') };
+    currentUser = { ...users[email] };
+    loginDone();
+    closeM('authModal');
+    notify('✅', 'Успішний вхід через Google!');
+  } catch (e) { notify('⚠', 'Помилка входу через Google: ' + (e.message || ''), true); }
+}
+
+// ===================================
+// AUTH
+// ===================================
+const users = {}; // email -> user
+let currentUser = null;
+
+function authTab(tab) {
+  ['login','register'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('body-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+function checkPwdStrength(v) {
+  const bar = document.getElementById('pwdBarFill');
+  const hint = document.getElementById('pwdHint');
+  let str = 0;
+  if (v.length >= 8) str++;
+  if (/[A-Z]/.test(v)) str++;
+  if (/[0-9]/.test(v)) str++;
+  if (/[^A-Za-z0-9]/.test(v)) str++;
+  const colors = ['var(--danger)','#ff7a3c','var(--gold)','var(--success)'];
+  const labels = ['Слабкий','Середній','Добрий','Сильний'];
+  bar.style.width = (str*25) + '%';
+  bar.style.background = colors[str-1] || 'var(--border)';
+  hint.textContent = str > 0 ? labels[str-1] : '';
+}
+
+function doLogin() {
+  const email = document.getElementById('lEmail').value.trim();
+  const pwd = document.getElementById('lPwd').value;
+  if (!email || !pwd) { notify('⚠','Введіть email та пароль', true); return; }
+  const user = users[email];
+  if (!user || user.pwd !== pwd) {
+    notify('❌','Невірний email або пароль', true);
+    showStatus(false, 'status_err');
+    return;
+  }
+  currentUser = {...user};
+  loginDone();
+}
+
+function doRegister() {
+  const name = document.getElementById('rName').value.trim();
+  const email = document.getElementById('rEmail').value.trim();
+  const tg = document.getElementById('rTg').value.trim();
+  const pwd = document.getElementById('rPwd').value;
+  const pwd2 = document.getElementById('rPwd2').value;
+  const terms = document.getElementById('rTerms').checked;
+  if (!name || !email || !pwd) { notify('⚠','Заповніть всі поля', true); return; }
+  if (pwd !== pwd2) { notify('⚠','Паролі не співпадають', true); return; }
+  if (!terms) { notify('⚠','Прийміть умови використання', true); return; }
+  if (pwd.length < 8) { notify('⚠','Пароль мінімум 8 символів', true); return; }
+  if (users[email]) { notify('⚠','Цей email вже зареєстровано', true); return; }
+  const newUser = { name, email, tg, pwd, orders: [], regDate: new Date().toLocaleDateString('uk-UA') };
+  users[email] = newUser;
+  currentUser = {...newUser};
+  loginDone();
+}
+
+function loginDone() {
+  document.body.classList.add('logged');
+  closeM('authModal');
+  document.getElementById('cabName').textContent = currentUser.name;
+  document.getElementById('cabEmail').textContent = currentUser.email;
+  document.getElementById('sName').value = currentUser.name;
+  document.getElementById('sEmail').value = currentUser.email;
+  document.getElementById('sTg').value = currentUser.tg || '';
+  renderCabOrders();
+  notify('👮','Привіт, ' + currentUser.name + '!');
+  showStatus(true, 'status_ok');
+}
+
+function doLogout() {
+  currentUser = null;
+  document.body.classList.remove('logged');
+  closeM('cabinetModal');
+  notify('👋', 'До побачення!');
+}
+
+function saveSettings() {
+  if (!currentUser) return;
+  const newName = document.getElementById('sName').value.trim();
+  const newEmail = document.getElementById('sEmail').value.trim();
+  if (!newName || !newEmail) { notify('⚠','Заповніть ім\'я та email', true); return; }
+  currentUser.name = newName;
+  currentUser.email = newEmail;
+  currentUser.tg = document.getElementById('sTg').value.trim();
+  document.getElementById('cabName').textContent = newName;
+  document.getElementById('cabEmail').textContent = newEmail;
+  if (users[newEmail]) users[newEmail] = {...currentUser};
+  notify('✅','Налаштування збережено!');
+}
+
+// ===================================
+// CABINET TABS
+// ===================================
+function cabTab(tab) {
+  document.querySelectorAll('.cab-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cab-section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('cab-'+tab).classList.add('active');
+}
+
+function renderCabOrders() {
+  if (!currentUser) return;
+  const orders = currentUser.orders || [];
+  const list = document.getElementById('orderList');
+  const dlList = document.getElementById('downloadList');
+  if (!orders.length) {
+    list.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Замовлень поки немає</p>';
+    dlList.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Немає доступних файлів</p>';
+    return;
+  }
+  list.innerHTML = orders.map(o => `
+    <div class="order-row">
+      <div class="order-icon">📦</div>
+      <div class="order-info">
+        <div class="order-name">${o.name}</div>
+        <div class="order-date">${o.date} · ${o.price} грн</div>
+      </div>
+      <span class="order-status ${o.status==='done'?'s-done':o.status==='pending'?'s-pend':'s-wait'}">
+        ${o.status==='done'?'✓ Виконано':o.status==='pending'?'⏳ Очікує':'❌ Відхилено'}
+      </span>
+      <span class="font-raj" style="font-size:0.8rem;color:var(--text3);">#${o.num}</span>
+    </div>
+  `).join('');
+
+  const doneOrders = orders.filter(o => o.status === 'done' && o.file);
+  if (!doneOrders.length) {
+    dlList.innerHTML = '<p class="text-c text-muted" style="padding:2rem;">Немає доступних файлів</p>';
+  } else {
+    dlList.innerHTML = doneOrders.map(o => `
+      <div class="order-row">
+        <div class="order-icon">📁</div>
+        <div class="order-info">
+          <div class="order-name">${o.name}</div>
+          <div class="order-date">${o.date}${o.note ? ' · ' + o.note : ''}</div>
+        </div>
+        <a href="${o.file}" target="_blank" class="dl-btn">⬇ Завантажити</a>
+      </div>
+    `).join('');
+  }
+}
+
+// ===================================
+// ADMIN PANEL
+// ===================================
+const ADMIN_PWD = 'elite2024';
+let adminLogged = false;
+let allOrders = [];
+
+function adminLogin() {
+  const pwd = document.getElementById('adminPwd').value;
+  if (pwd === ADMIN_PWD) {
+    adminLogged = true;
+    document.getElementById('adminLoginBlock').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    renderAdminOrders();
+    renderAdminUsers();
+    updateAdminStats();
+    notify('🛡','Ласкаво просимо, адміне!');
+  } else {
+    notify('❌','Невірний пароль адміна', true);
+    showStatus(false, 'status_err');
+  }
+}
+
+function adminSec(sec) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('asec-'+sec).classList.add('active');
+  event.target.classList.add('active');
+  if (sec === 'orders') renderAdminOrders();
+  if (sec === 'users') renderAdminUsers();
+  if (sec === 'stats') updateAdminStats();
+}
+
+function renderAdminOrders() {
+  const tbody = document.getElementById('adminOrdersTbody');
+  if (!allOrders.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-c text-muted" style="padding:1.5rem;">Замовлень поки немає</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allOrders.map((o, i) => `
+    <tr>
+      <td style="color:var(--accent2);font-family:'Orbitron',sans-serif;font-size:0.8rem;">#${o.num}</td>
+      <td>${o.user}<br><span style="font-size:0.75rem;color:var(--text3);">${o.email}</span></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.product}</td>
+      <td style="color:var(--gold);">${o.price}</td>
+      <td><span class="order-status ${o.status==='done'?'s-done':'s-pend'}">${o.status==='done'?'✓ Виконано':'⏳ Очікує'}</span></td>
+      <td>
+        <button class="issue-btn" id="ob${i}" onclick="quickIssue(${i})" ${o.status==='done'?'disabled':''}>
+          ${o.status==='done'?'✓ Видано':'Видати'}
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderAdminUsers() {
+  const tbody = document.getElementById('adminUsersTbody');
+  const allUsers = Object.values(users);
+  if (!allUsers.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="text-c text-muted" style="padding:1.5rem;">Немає користувачів</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allUsers.map(u => `
+    <tr>
+      <td style="font-family:'Rajdhani',sans-serif;font-weight:600;">${u.name}</td>
+      <td>${u.email}</td>
+      <td>${(u.orders||[]).length}</td>
+      <td style="color:var(--text3);">${u.regDate||'—'}</td>
+    </tr>
+  `).join('');
+}
+
+function updateAdminStats() {
+  document.getElementById('statOrders').textContent = allOrders.length;
+  const rev = allOrders.reduce((a,o) => a + parseInt(o.price), 0);
+  document.getElementById('statRevenue').textContent = rev + ' грн';
+  document.getElementById('statUsers').textContent = Object.keys(users).length;
+}
+
+function quickIssue(i) {
+  const order = allOrders[i];
+  if (!order) return;
+  const file = prompt('Введіть посилання на файл для: ' + order.user + '\n' + order.product);
+  if (!file) return;
+  allOrders[i].status = 'done';
+  // Update user orders
+  const user = users[order.email];
+  if (user && user.orders) {
+    const uo = user.orders.find(o => o.num === order.num);
+    if (uo) { uo.status = 'done'; uo.file = file; }
+    if (currentUser && currentUser.email === order.email) {
+      currentUser.orders = user.orders;
+      renderCabOrders();
+    }
+  }
+  renderAdminOrders();
+  updateAdminStats();
+  notify('✅', 'Товар видано користувачу ' + order.user + '!');
+}
+
+function issueProduct() {
+  const email = document.getElementById('issueUser').value.trim();
+  const num = document.getElementById('issueOrderNum').value.trim();
+  const file = document.getElementById('issueFile').value.trim();
+  const note = document.getElementById('issueNote').value.trim();
+  if (!email || !num || !file) { notify('⚠','Заповніть всі поля', true); return; }
+  const user = users[email];
+  if (!user) { notify('❌','Користувача не знайдено', true); return; }
+  const orderNum = parseInt(num.replace('#',''));
+  const order = user.orders && user.orders.find(o => o.num === orderNum);
+  if (!order) { notify('❌','Замовлення не знайдено', true); return; }
+  order.status = 'done';
+  order.file = file;
+  if (note) order.note = note;
+  // Update allOrders
+  const ao = allOrders.find(o => o.num === orderNum);
+  if (ao) ao.status = 'done';
+  if (currentUser && currentUser.email === email) {
+    currentUser.orders = user.orders;
+    renderCabOrders();
+  }
+  renderAdminOrders();
+  updateAdminStats();
+  notify('🎁', 'Товар видано успішно! Користувач ' + user.name + ' може завантажити файл.');
+  document.getElementById('issueUser').value='';
+  document.getElementById('issueOrderNum').value='';
+  document.getElementById('issueFile').value='';
+  document.getElementById('issueNote').value='';
+}
+
+// ===================================
+// COMMISSION
+// ===================================
+let openCommId = null;
+function openCommission(id, name) {
+  openCommId = id;
+  openM('commModal');
+}
+function submitQuick() {
+  const contact = document.getElementById('qContact').value.trim();
+  const details = document.getElementById('qDetails').value.trim();
+  if (!contact || !details) { notify('⚠','Заповніть всі поля', true); return; }
+  closeM('commModal');
+  notify('📨','Запит надіслано! Ми зв\'яжемось протягом 24 годин.');
+}
+
+function closeCommForm() {
+  document.getElementById('commissionForm').classList.remove('open');
+}
+
+function submitCommission() {
+  const name = document.getElementById('comName').value.trim();
+  const contact = document.getElementById('comContact').value.trim();
+  const details = document.getElementById('comDetails').value.trim();
+  if (!name || !contact || !details) { notify('⚠','Заповніть всі поля', true); return; }
+  document.getElementById('commissionForm').classList.remove('open');
+  notify('📨','Заявку надіслано! Очікуйте відповіді в Telegram.');
+}
+
+// ===================================
+// MODALS
+// ===================================
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ===================================
+// NOTIFY
+// ===================================
+let notifTimer;
+function notify(icon, text, isError = false) {
+  const el = document.getElementById('notif');
+  document.getElementById('notifIcon').textContent = icon;
+  document.getElementById('notifText').textContent = text;
+  el.style.borderColor = isError ? 'var(--danger)' : 'var(--border2)';
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+function hideNotif() { document.getElementById('notif').classList.remove('show'); }
+
+// ===================================
+// CONTACT FORM
+// ===================================
+function sendContact(btn) {
+  const name = document.getElementById('ctName').value.trim();
+  const contact = document.getElementById('ctContact').value.trim();
+  const msg = document.getElementById('ctMsg').value.trim();
+  if (!name || !msg) { notify('⚠','Заповніть ім\'я та повідомлення', true); return; }
+  btn.innerHTML = '✅ Надіслано!';
+  btn.disabled = true;
+  notify('📨','Повідомлення надіслано! Відповімо якнайшвидше.');
+  setTimeout(() => {
+    btn.innerHTML = '📨 Надіслати';
+    btn.disabled = false;
+    document.getElementById('ctName').value = '';
+    document.getElementById('ctContact').value = '';
+    document.getElementById('ctMsg').value = '';
+  }, 3000);
+}
+
+// ===================================
+// COUNTERS
+// ===================================
+function counter(id, target, suffix='') {
+  const el = document.getElementById(id);
+  let n = 0;
+  const step = target / 60;
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = (Number.isInteger(target) ? Math.floor(n) : n.toFixed(1)) + suffix;
+    if (n >= target) clearInterval(t);
+  }, 20);
+}
+
+// ===================================
+// NAV SCROLL EFFECT
+// ===================================
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.boxShadow = window.scrollY > 50 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+});
+
+// ===================================
+// INIT
+// ===================================
+renderProducts();
+renderModels();
+renderFAQ();
+initGoogleAuth();
+setTimeout(() => { counter('sn1',48,'+'); counter('sn2',1200,'+'); counter('sn3',4.9,'★'); }, 500);
+
+// Додаткові анімації при завантаженні
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.product-card').forEach((el, i) => {
+    el.style.animationDelay = (i * 0.06) + 's';
+  });
+});
+</script>
+</body>
+</html>
